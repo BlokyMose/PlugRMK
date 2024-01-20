@@ -106,5 +106,15 @@ namespace PlugRMK.GenericUti
             var direction = to - from;
             return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         }
+
+        public static void CrossOp(out float xCurrent, float xTotal, float yCurrent, float yTotal)
+        {
+            xCurrent = xTotal * yCurrent / yTotal;
+        }
+
+        public static void CrossOp(float xCurrent, out float xTotal, float yCurrent, float yTotal)
+        {
+            xTotal = xCurrent * yTotal / yCurrent;
+        }
     }
 }
