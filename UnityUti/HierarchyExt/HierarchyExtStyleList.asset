@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b8b87df230c86547b24d9a252bc455e, type: 3}
+  m_Name: HierarchyExtStyleList
+  m_EditorClassIdentifier: 
+  styles:
+  - token: Player
+    labelName: Player
+    textColor: {r: 0.33564085, g: 1, b: 0.24056602, a: 1}
+    textAlignment: 0
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 0
+    bgColor: {r: 0.745283, g: 0.35506406, b: 0.35506406, a: 1}
+    bgColorHover: {r: 0.5660378, g: 0.2803489, b: 0.2803489, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 0
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
+  - token: __
+    labelName: 
+    textColor: {r: 1, g: 0.9060749, b: 0, a: 1}
+    textAlignment: 1
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 0
+    bgColor: {r: 0.5660378, g: 0.357917, b: 0.1308295, a: 1}
+    bgColorHover: {r: 0.3301887, g: 0.23963155, b: 0.14173195, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 0
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
+  - token: '[GAME]'
+    labelName: GAME
+    textColor: {r: 0.77105, g: 1, b: 0.6367924, a: 1}
+    textAlignment: 1
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 1
+    bgColor: {r: 0.20818219, g: 0.34901962, b: 0.14117648, a: 1}
+    bgColorHover: {r: 0.13343845, g: 0.20784314, b: 0.09803922, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 1
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
+  - token: '[CHARACTERS]'
+    labelName: CHARACTERS
+    textColor: {r: 0.81619364, g: 1, b: 0.8066038, a: 1}
+    textAlignment: 1
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 1
+    bgColor: {r: 0.18912424, g: 0.4716981, b: 0.24050133, a: 1}
+    bgColorHover: {r: 0.10016462, g: 0.20784314, b: 0.09803922, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 1
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
+  - token: '[ENVIRONMENT]'
+    labelName: ENVIRONMENT
+    textColor: {r: 0.47668213, g: 0.9811321, b: 0.93678486, a: 1}
+    textAlignment: 1
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 1
+    bgColor: {r: 0.14117648, g: 0.34901962, b: 0.29877433, a: 1}
+    bgColorHover: {r: 0.09803922, g: 0.20784314, b: 0.19116363, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 1
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
+  - token: '[OBJECTS]'
+    labelName: OBJECTS
+    textColor: {r: 1, g: 0.87332183, b: 0.3066038, a: 1}
+    textAlignment: 1
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 1
+    bgColor: {r: 0.5566038, g: 0.4414422, b: 0.17065683, a: 1}
+    bgColorHover: {r: 0.2735849, g: 0.2522226, b: 0.14066394, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 1
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
+  - token: '[EXTRA]'
+    labelName: 'EXTRA '
+    textColor: {r: 1, g: 0.48584908, b: 0.8136202, a: 1}
+    textAlignment: 1
+    fontStyle: 1
+    textOffset: {x: 18, y: 0}
+    isCustomBG: 1
+    bgColor: {r: 0.4716981, g: 0.17577429, b: 0.29271188, a: 1}
+    bgColorHover: {r: 0.3962264, g: 0.19250624, b: 0.31044942, a: 1}
+    bgColorSelect: {r: 0.1725, g: 0.3647, b: 0.5294, a: 1}
+    isCustomBGOffset: 1
+    bgOffset: {x: 0, y: 0}
+    icon: {fileID: 0}
