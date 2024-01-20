@@ -13,14 +13,14 @@ Extensions or utility methods for:
 Package for:
 - DSyntax
 
-## Unityuti
+## UnityUti
 Extensions or utility methods for:
 - Debug
 - Game components, like AudioSource, LayerMask, etc.
 
 Adapted External Plugins:
 - HierarchyExt: adapted from "Colourful Hierarchy Category GameObject" by M Studio Hub; free of charge in Unity Asset Store
-(https://assetstore.unity.com/packages/tools/utilities/colourful-hierarchy-category-gameobject-205934#reviews)
+(https://assetstore.unity.com/packages/tools/utilities/colourful-hierarchy-category-gameobject-205934)
 
 - Simple Folder Icons: adapted from "SimpleFolderIcon" by SeaeeesSan; free of charge in GitHub 
 (https://github.com/SeaeeesSan/SimpleFolderIcon)
