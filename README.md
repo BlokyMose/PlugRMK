@@ -1,5 +1,5 @@
 # PlugRMK
- Generic plugins for developing games in Unity
+Generic plugins, script extensions, and game components for developing games in Unity.
 
 # Plugins
 ## GenericUti
