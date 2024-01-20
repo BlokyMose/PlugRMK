@@ -49,7 +49,7 @@ namespace PlugRMK.UnityUti
 
         public static GameObject Find(string goName)
         {
-            var allGOs = GameObject.FindObjectsOfType<GameObject>(true);
+            var allGOs = GameObject.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (var go in allGOs)
                 if (go.name == goName)
                     return go;

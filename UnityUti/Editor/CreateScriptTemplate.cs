@@ -20,6 +20,9 @@ namespace PlugRMK.UnityUti.Editor
         [MenuItem("Assets/Create/New Code/Static Class", priority = PRIORITY_INDEX)]
         public static void CreateStaticClass() => CreateScriptFromTemplateName("StaticClass");
 
+        [MenuItem("Assets/Create/New Code/Interface", priority = PRIORITY_INDEX)]
+        public static void CreateInterface() => CreateScriptFromTemplateName("Interface");
+
         public static void CreateScriptFromTemplateName(string templateName)
         {
             var TEMPLATES = "Templates";

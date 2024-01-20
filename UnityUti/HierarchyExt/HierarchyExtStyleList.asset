@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   styles:
   - token: Player
-    labelName: Player
+    labelName: 
     textColor: {r: 0.33564085, g: 1, b: 0.24056602, a: 1}
     textAlignment: 0
     fontStyle: 1
