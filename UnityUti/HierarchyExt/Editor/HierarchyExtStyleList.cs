@@ -12,8 +12,15 @@ namespace PlugRMK.UnityUti.Hext
         [Button, PropertyOrder(-1)]
         public void InstantiateToScene()
         {
+#if UNITY_EDITOR
+            int undoGroupID = UnityEditor.Undo.GetCurrentGroup();
             foreach (var item in styles)
-                new GameObject(item.token);
+            {
+                var go = new GameObject(item.token);
+                UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Hierarchy Ext: Instantiated GO");
+            }
+            UnityEditor.Undo.CollapseUndoOperations(undoGroupID);
+#endif
         }
     }
 }

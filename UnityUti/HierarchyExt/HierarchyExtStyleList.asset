@@ -17,7 +17,7 @@ MonoBehaviour:
     labelName: 
     textColor: {r: 0.33564085, g: 1, b: 0.24056602, a: 1}
     textAlignment: 0
-    fontStyle: 1
+    fontStyle: 0
     textOffset: {x: 18, y: 0}
     isCustomBG: 0
     bgColor: {r: 0.745283, g: 0.35506406, b: 0.35506406, a: 1}

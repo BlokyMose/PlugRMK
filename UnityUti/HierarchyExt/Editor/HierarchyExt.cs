@@ -131,5 +131,17 @@ namespace PlugRMK.UnityUti.Hext
                 }
             }
         }
+
+        [MenuItem("GameObject/PlugRMK/Instantiate All Hierarchy Ext List")]
+        public static void CreateAllHierarchyExtList()
+        {
+            if (extStyleList == null)
+            {
+                Debug.LogWarning("Hierarchy Extension List is not fonud or loaded yet");
+                return;
+            }
+
+            extStyleList.InstantiateToScene();
+        }
     }
 }
