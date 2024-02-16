@@ -51,6 +51,29 @@ namespace PlugRMK.UnityUti
                 return OnEvaluate(new(timeStart, valueStart, timeEnd, valueEnd, time));
             }
 
+
+            public static Ease Linear(float timeStart, float valueStart, float timeEnd, float valueEnd)
+            {
+                return new(timeStart, valueStart, timeEnd, valueEnd, LinearEvaluate);
+            }
+
+            static float LinearEvaluate(EaseParameter param)
+            {
+                return LinearEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
+            }
+
+            static float LinearEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
+            {
+                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
+
+                return timeNow <= timeStart
+                  ? valueStart
+                  : timeNow >= timeEnd
+                  ? valueEnd
+                  : timeRatio * (valueEnd - valueStart) + valueStart;
+            }
+
+
             #region [Out Quad]
 
             public static Ease OutQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
