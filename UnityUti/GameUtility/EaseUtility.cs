@@ -11,6 +11,26 @@ namespace PlugRMK.UnityUti
 {
     public static class EaseUtility
     {
+        public enum EaseType { 
+            Linear, 
+            
+            Sine, 
+            SineIn, 
+            SineOut, 
+
+            Quad, 
+            QuadIn, 
+            QuadOut, 
+            
+            Elastic, 
+            ElasticIn,
+            ElasticOut,
+
+            Bounce,
+            BounceIn,
+            BounceOut
+        }
+
         public struct EaseParameter
         {
             public float timeStart;
@@ -46,11 +66,70 @@ namespace PlugRMK.UnityUti
                 this.OnEvaluate = OnEvaluate;
             }
 
+            public Ease(float timeStart, float valueStart, float timeEnd, float valueEnd, EaseType easeType)
+            {
+                this.timeStart = timeStart;
+                this.valueStart = valueStart;
+                this.timeEnd = timeEnd;
+                this.valueEnd = valueEnd;
+
+                switch (easeType)
+                {
+                    case EaseType.Linear:
+                        this.OnEvaluate = LinearEvaluate;
+
+                        break;
+                    case EaseType.Sine:
+                        this.OnEvaluate = SineEvaluate;
+                        break;
+                    case EaseType.SineIn:
+                        this.OnEvaluate = SineInEvaluate;
+                        break;
+                    case EaseType.SineOut:
+                        this.OnEvaluate = SineOutEvaluate;
+
+                        break;
+                    case EaseType.Quad:
+                        this.OnEvaluate = QuadEvaluate;
+                        break;
+                    case EaseType.QuadIn:
+                        this.OnEvaluate = QuadInEvaluate;
+                        break;
+                    case EaseType.QuadOut:
+                        this.OnEvaluate = QuadOutEvaluate;
+
+                        break;
+                    case EaseType.Elastic:
+                        this.OnEvaluate = ElasticEvaluate;
+                        break;
+                    case EaseType.ElasticIn:
+                        this.OnEvaluate = ElasticInEvaluate;
+                        break;
+                    case EaseType.ElasticOut:
+                        this.OnEvaluate = ElasticOutEvaluate;
+
+                        break;
+                    case EaseType.Bounce:
+                        this.OnEvaluate = BounceEvaluate;
+                        break;
+                    case EaseType.BounceIn:
+                        this.OnEvaluate = BounceInEvaluate;
+                        break;
+                    case EaseType.BounceOut:
+                        this.OnEvaluate = BounceOutEvaluate;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             public float Evaluate(float time)
             {
                 return OnEvaluate(new(timeStart, valueStart, timeEnd, valueEnd, time));
             }
 
+
+            #region [Linear]
 
             public static Ease Linear(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
@@ -74,95 +153,18 @@ namespace PlugRMK.UnityUti
             }
 
 
-            #region [Out Quad]
-
-            public static Ease OutQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
-            {
-                return new(timeStart, valueStart, timeEnd, valueEnd, OutQuadEvaluate);
-            }
-
-            static float OutQuadEvaluate(EaseParameter param)
-            {
-                return OutQuadEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
-            }
-
-            static float OutQuadEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
-            {
-                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
-
-                return timeNow <= timeStart
-                  ? valueStart
-                  : timeNow >= timeEnd
-                  ? valueEnd
-                  : (1 - (1 - timeRatio) * (1 - timeRatio)) * (valueEnd - valueStart) + valueStart;
-            }
-
             #endregion
-
-            #region [In Quad]
-
-            public static Ease InQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
-            {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InQuadEvaluate);
-            }
-
-            static float InQuadEvaluate(EaseParameter param)
-            {
-                return InQuadEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
-            }
-
-            static float InQuadEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
-            {
-                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
-
-                return timeNow <= timeStart
-                  ? valueStart
-                  : timeNow >= timeEnd
-                  ? valueEnd
-                  : (timeRatio * timeRatio) * (valueEnd - valueStart) + valueStart;
-            }
-
-
-            #endregion
-
-            #region [InOut Quad]
-
-            public static Ease InOutQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
-            {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InOutQuadEvaluate);
-            }
-
-            static float InOutQuadEvaluate(EaseParameter param)
-            {
-                return InOutQuadEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
-            }
-
-            static float InOutQuadEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
-            {
-                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
-
-                return timeNow <= timeStart
-                  ? valueStart
-                  : timeNow >= timeEnd
-                  ? valueEnd
-                  : (timeRatio < 0.5f 
-                        ? 2 * timeRatio * timeRatio 
-                        : 1 - Mathf.Pow(-2 * timeRatio + 2, 2) / 2
-                    ) * (valueEnd - valueStart) + valueStart;
-            }
-
-            #endregion
-
+            
             // ===
 
             #region [Out Sine]
 
             public static Ease OutSine(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, OutSineEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, SineOutEvaluate);
             }
 
-            static float OutSineEvaluate(EaseParameter param)
+            static float SineOutEvaluate(EaseParameter param)
             {
                 return OutSineEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -184,10 +186,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease InSine(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InSineEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, SineInEvaluate);
             }
 
-            static float InSineEvaluate(EaseParameter param)
+            static float SineInEvaluate(EaseParameter param)
             {
                 return InSineEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -210,10 +212,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease InOutSine(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InOutSineEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, SineEvaluate);
             }
 
-            static float InOutSineEvaluate(EaseParameter param)
+            static float SineEvaluate(EaseParameter param)
             {
                 return InOutSineEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -230,6 +232,87 @@ namespace PlugRMK.UnityUti
             }
 
             #endregion
+            
+            // ===
+
+            #region [Out Quad]
+
+            public static Ease OutQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
+            {
+                return new(timeStart, valueStart, timeEnd, valueEnd, QuadOutEvaluate);
+            }
+
+            static float QuadOutEvaluate(EaseParameter param)
+            {
+                return OutQuadEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
+            }
+
+            static float OutQuadEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
+            {
+                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
+
+                return timeNow <= timeStart
+                  ? valueStart
+                  : timeNow >= timeEnd
+                  ? valueEnd
+                  : (1 - (1 - timeRatio) * (1 - timeRatio)) * (valueEnd - valueStart) + valueStart;
+            }
+
+            #endregion
+
+            #region [In Quad]
+
+            public static Ease InQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
+            {
+                return new(timeStart, valueStart, timeEnd, valueEnd, QuadInEvaluate);
+            }
+
+            static float QuadInEvaluate(EaseParameter param)
+            {
+                return InQuadEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
+            }
+
+            static float InQuadEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
+            {
+                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
+
+                return timeNow <= timeStart
+                  ? valueStart
+                  : timeNow >= timeEnd
+                  ? valueEnd
+                  : (timeRatio * timeRatio) * (valueEnd - valueStart) + valueStart;
+            }
+
+
+            #endregion
+
+            #region [InOut Quad]
+
+            public static Ease InOutQuad(float timeStart, float valueStart, float timeEnd, float valueEnd)
+            {
+                return new(timeStart, valueStart, timeEnd, valueEnd, QuadEvaluate);
+            }
+
+            static float QuadEvaluate(EaseParameter param)
+            {
+                return InOutQuadEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
+            }
+
+            static float InOutQuadEvaluate(float timeStart, float valueStart, float timeEnd, float valueEnd, float timeNow)
+            {
+                var timeRatio = (timeNow - timeStart) / (timeEnd - timeStart);
+
+                return timeNow <= timeStart
+                  ? valueStart
+                  : timeNow >= timeEnd
+                  ? valueEnd
+                  : (timeRatio < 0.5f 
+                        ? 2 * timeRatio * timeRatio 
+                        : 1 - Mathf.Pow(-2 * timeRatio + 2, 2) / 2
+                    ) * (valueEnd - valueStart) + valueStart;
+            }
+
+            #endregion
 
             // ===
 
@@ -237,10 +320,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease OutElastic(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, OutElasticEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, ElasticOutEvaluate);
             }
 
-            static float OutElasticEvaluate(EaseParameter param)
+            static float ElasticOutEvaluate(EaseParameter param)
             {
                 return OutElasticEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -263,10 +346,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease InElastic(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InElasticEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, ElasticInEvaluate);
             }
 
-            static float InElasticEvaluate(EaseParameter param)
+            static float ElasticInEvaluate(EaseParameter param)
             {
                 return InElasticEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -289,10 +372,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease InOutElastic(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InOutElasticEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, ElasticEvaluate);
             }
 
-            static float InOutElasticEvaluate(EaseParameter param)
+            static float ElasticEvaluate(EaseParameter param)
             {
                 return InOutElasticEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -319,10 +402,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease OutBounce(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, OutBounceEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, BounceOutEvaluate);
             }
 
-            static float OutBounceEvaluate(EaseParameter param)
+            static float BounceOutEvaluate(EaseParameter param)
             {
                 return OutBounceEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -365,10 +448,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease InBounce(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InBounceEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, BounceInEvaluate);
             }
 
-            static float InBounceEvaluate(EaseParameter param)
+            static float BounceInEvaluate(EaseParameter param)
             {
                 return InBounceEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
@@ -384,10 +467,10 @@ namespace PlugRMK.UnityUti
 
             public static Ease InOutBounce(float timeStart, float valueStart, float timeEnd, float valueEnd)
             {
-                return new(timeStart, valueStart, timeEnd, valueEnd, InOutBounceEvaluate);
+                return new(timeStart, valueStart, timeEnd, valueEnd, BounceEvaluate);
             }
 
-            static float InOutBounceEvaluate(EaseParameter param)
+            static float BounceEvaluate(EaseParameter param)
             {
                 return InOutBounceEvaluate(param.timeStart, param.valueStart, param.timeEnd, param.valueEnd, param.timeNow);
             }
