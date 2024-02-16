@@ -42,8 +42,19 @@ namespace PlugRMK.UnityUti
         public static List<T> GetComponentsInFamily<T>(this GameObject thisComponent) where T : Component
         {
             var targetComponents = new List<T>(thisComponent.GetComponents<T>());
-            targetComponents.AddRange(thisComponent.GetComponentsInParent<T>());
-            targetComponents.AddRange(thisComponent.GetComponentsInChildren<T>());
+
+            var componentsInParent = new List<T>(thisComponent.GetComponentsInParent<T>());
+            foreach (var component in targetComponents)
+                if (componentsInParent.Contains(component))
+                    componentsInParent.Remove(component);
+            targetComponents.AddRange(componentsInParent);
+
+            var componentsInChildren = new List<T>(thisComponent.GetComponentsInChildren<T>());
+            foreach (var component in targetComponents)
+                if (componentsInChildren.Contains(component))
+                    componentsInChildren.Remove(component);
+            targetComponents.AddRange(componentsInChildren);
+
             return targetComponents;
         }
 
