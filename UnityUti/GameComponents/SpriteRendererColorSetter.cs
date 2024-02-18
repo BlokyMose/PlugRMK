@@ -49,17 +49,13 @@ namespace PlugRMK.UnityUti
         [Button("Get All SRs")]
         public void GetAllSpriteRenderersInChildren()
         {
-            var allSRs = gameObject.GetComponentsInFamily<SpriteRenderer>();
-            foreach (var sr in allSRs)
-            {
-                if (!srs.Contains(sr))
-                    srs.Add(sr);
-            }
+            srs.AddIfHasnt(gameObject.GetComponentsInFamily<SpriteRenderer>());
 
             foreach (var sr in excludeSRs)
             {
                 var foundSR = srs.Find(x => x == sr);
-                if (foundSR != null) srs.Remove(foundSR);
+                if (foundSR != null) 
+                    srs.Remove(foundSR);
             }
         }
 
@@ -102,7 +98,6 @@ namespace PlugRMK.UnityUti
             srs.RemoveIfHas(sr);
             excludeSRs.Add(sr);
         }
-
 
         #region [Methods: Alpha]
 
@@ -189,6 +184,5 @@ namespace PlugRMK.UnityUti
         }
 
         #endregion
-
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 //using static UnityEditor.PlayerSettings;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace PlugRMK.GenericUti
 {
@@ -42,6 +41,16 @@ namespace PlugRMK.GenericUti
         public static Vector2 ToVector2(this float angle)
         {
             return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+        }
+
+        public static Vector2 NewVector2(this float value)
+        {
+            return new(value, value);
+        }
+
+        public static Vector3 NewVector3(this float value)
+        {
+            return new(value, value, value);
         }
 
         public static float ToAngle(this Vector2 vector)
@@ -115,6 +124,19 @@ namespace PlugRMK.GenericUti
         public static void CrossOp(float xCurrent, out float xTotal, float yCurrent, float yTotal)
         {
             xTotal = xCurrent * yTotal / yCurrent;
+        }
+
+        public static Vector2 Clamp(this Vector2 vector2, float min, float max)
+        {
+            return vector2.Clamp(min.NewVector2(), max.NewVector2());
+        }
+
+        public static Vector2 Clamp(this Vector2 vector2, Vector2 min, Vector2 max)
+        {
+            return new(
+                Mathf.Clamp(vector2.x, min.x, max.x),
+                Mathf.Clamp(vector2.y, min.y, max.y)
+                );
         }
     }
 }

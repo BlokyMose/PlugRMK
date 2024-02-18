@@ -55,9 +55,15 @@ namespace PlugRMK.GenericUti
             return list[list.Count - 1];
         }
 
-        public static void AddIfHasnt<T>(this IList<T> list, T addValue)
+        public static void AddIfHasnt<T>(this IList<T> list, T itemToAdd)
         {
-            if(!list.Contains(addValue)) list.Add(addValue);
+            if(!list.Contains(itemToAdd)) list.Add(itemToAdd);
+        }
+
+        public static void AddIfHasnt<T>(this IList<T> list, IList<T> listToAdd)
+        {
+            foreach (var item in listToAdd)
+                list.AddIfHasnt(item);
         }
 
         public static T GetRandom<T>(this IList<T> list) where T : class
