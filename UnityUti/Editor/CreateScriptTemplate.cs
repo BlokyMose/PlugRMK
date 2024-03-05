@@ -23,9 +23,11 @@ namespace PlugRMK.UnityUti.Editor
         [MenuItem("Assets/Create/New Code/Interface", priority = PRIORITY_INDEX)]
         public static void CreateInterface() => CreateScriptFromTemplateName("Interface");
 
+        [MenuItem("Assets/Create/New Code/Editor Window", priority = PRIORITY_INDEX)]
+        public static void CreateEditorWindow() => CreateScriptFromTemplateName("EditorWindow");
         public static void CreateScriptFromTemplateName(string templateName)
         {
-            var TEMPLATES = "Templates";
+            var TEMPLATES = "ScriptTemplates";
             var parentPath = GetParentPath(nameof(CreateScriptTemplate));
             var templatePath = parentPath + "/" + TEMPLATES + "/" + templateName + ".cs.txt";
 

@@ -79,6 +79,24 @@ namespace PlugRMK.GenericUti
 
     }
 
+    public class EditorColors
+    {
+        public Color Color { get; private set; }
+        public Color Content { get; private set; }
+        public Color Background { get; private set; }
+        public EditorColors()
+        {
+
+        }
+
+        public EditorColors(Color color, Color content, Color background)
+        {
+            this.Color = color;
+            this.Content = content;
+            this.Background = background;
+        }
+    }
+
     public enum UnityInitialMethod { Awake, Start, OnEnable }
 
 }
