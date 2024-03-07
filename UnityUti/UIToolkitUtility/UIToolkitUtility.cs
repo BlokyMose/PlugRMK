@@ -65,9 +65,14 @@ namespace PlugRMK.UnityUti
             return ve.style.top.value.value + ve.layout.height * anchor;
         }
 
-        public static Vector2 GetPos(this VisualElement ve)
+        public static Vector2 GetPos(this VisualElement ve, float xAnchor = 0, float yAnchor = 0)
         {
-            return new(ve.GetX(), ve.GetY());
+            return new(ve.GetX(xAnchor), ve.GetY(yAnchor));
+        }
+
+        public static Vector2 GetPos(this VisualElement ve, float anchor = 0)
+        {
+            return new(ve.GetX(anchor), ve.GetY(anchor));
         }
 
         public static void SwitchClass(this VisualElement ve, string classNameToRemove, string classNameToAdd)
