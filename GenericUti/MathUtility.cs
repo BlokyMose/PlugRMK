@@ -138,5 +138,22 @@ namespace PlugRMK.GenericUti
                 Mathf.Clamp(vector2.y, min.y, max.y)
                 );
         }
+
+        public static float Between(float min, float max, float ratio)
+        {
+            ratio = Mathf.Clamp01(ratio);
+            var distance = max - min;
+            return min + distance * ratio;
+        }
+
+        public static Vector3 Between(Vector2 min, Vector2 max, float ratio)
+        {
+            return new(Between(min.x, max.x, ratio), Between(min.y, max.y, ratio));
+        }
+
+        public static Vector3 Between(Vector3 min, Vector3 max, float ratio)
+        {
+            return new(Between(min.x, max.x, ratio), Between(min.y, max.y, ratio), Between(min.z, max.z, ratio));
+        }
     }
 }
