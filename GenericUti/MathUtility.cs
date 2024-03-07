@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-//using static UnityEditor.PlayerSettings;
 
 namespace PlugRMK.GenericUti
 {
@@ -154,6 +153,34 @@ namespace PlugRMK.GenericUti
         public static Vector3 Between(Vector3 min, Vector3 max, float ratio)
         {
             return new(Between(min.x, max.x, ratio), Between(min.y, max.y, ratio), Between(min.z, max.z, ratio));
+        }
+
+        public enum DistanceCalcMode { XY, XZ, YZ, XYZ }
+        public static float Distance(Vector3 a, Vector3 b, DistanceCalcMode mode)
+        {
+            float num, num2, num3;
+            switch (mode)
+            {
+                case DistanceCalcMode.XY:
+                    num = a.x - b.x;
+                    num2 = a.y - b.y;
+                    return (float)Mathf.Sqrt(num * num + num2 * num2);
+                case DistanceCalcMode.XZ:
+                    num = a.x - b.x;
+                    num2 = a.z - b.z;
+                    return (float)Mathf.Sqrt(num * num + num2 * num2);
+                case DistanceCalcMode.YZ:
+                    num = a.y - b.y;
+                    num2 = a.z - b.z;
+                    return (float)Mathf.Sqrt(num * num + num2 * num2);
+                case DistanceCalcMode.XYZ:
+                    num = a.x - b.x;
+                    num2 = a.y - b.y;
+                    num3 = a.z - b.z;
+                    return (float)Mathf.Sqrt(num * num + num2 * num2 + num3 * num3);
+                default:
+                    return 0;
+            }
         }
     }
 }
