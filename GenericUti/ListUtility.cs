@@ -66,6 +66,13 @@ namespace PlugRMK.GenericUti
                 list.AddIfHasnt(item);
         }
 
+        public static void RemoveNulls<T>(this IList<T> list)
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+                if (list[i] == null)
+                    list.RemoveAt(i);
+        }
+
         public static T GetRandom<T>(this IList<T> list) where T : class
         {
             if (list.Count == 0)
