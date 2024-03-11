@@ -6,6 +6,8 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/GO Controller")]
+    [Icon(GameComponentsIcon.UNI_GO)]
+
     public class GOController : MonoBehaviour
     {
         [Serializable]

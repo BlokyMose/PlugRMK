@@ -10,7 +10,9 @@ using Random = UnityEngine.Random;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Audio Source Random")]
+    [Icon(GameComponentsIcon.UI_SOUND)]
     [RequireComponent(typeof(AudioSource))]
+
     public class AudioSourceRandom : MonoBehaviour
     {
         [Serializable]

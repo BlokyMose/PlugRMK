@@ -9,6 +9,8 @@ using UnityEngine.Events;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Event Controller")]
+    [Icon(GameComponentsIcon.EVENT)]
+
     public class EventController : MonoBehaviour
     {
         [Serializable]

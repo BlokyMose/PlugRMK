@@ -6,6 +6,7 @@ using UnityEngine.UI;
 namespace PlugRMK.UnityUti.BasicFunction
 {
     [AddComponentMenu("Unity Utility/Basic/Set Random Image (IBasicFuntion)")]
+    [Icon(GameComponentsIcon.UNI_SCRIPT)]
 
     public class SetRandomImage : MonoBehaviour, IBasicFunction
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Sprite Renderer Color Setter")]
-    [Icon(GameComponentsIcon.UNI_SPRITERENDERER)]
+    [Icon(GameComponentsIcon.UNI_SPRITE_RENDERER)]
     public class SpriteRendererColorSetter : MonoBehaviour
     {
         [System.Serializable]

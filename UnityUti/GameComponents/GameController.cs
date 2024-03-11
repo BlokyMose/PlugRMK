@@ -5,6 +5,8 @@ using UnityEngine.Search;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Game Controller")]
+    [Icon(GameComponentsIcon.SET_SCENE)]
+
     public class GameController : MonoBehaviour
     {
         [SerializeField, SearchContext("t:scene")]

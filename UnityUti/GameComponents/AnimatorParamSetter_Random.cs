@@ -4,6 +4,8 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Basic/Animator Param Setter (Random)")]
+    [Icon(GameComponentsIcon.UNI_ANIMATION)]
+
     public class AnimatorParamSetter_Random : MonoBehaviour, IBasicFunction
     {
         [SerializeField]

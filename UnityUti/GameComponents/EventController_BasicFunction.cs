@@ -5,6 +5,7 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Event Controller (Basic Function)")]
+    [Icon(GameComponentsIcon.EVENT)]
 
     public class EventController_BasicFunction : EventController
     {

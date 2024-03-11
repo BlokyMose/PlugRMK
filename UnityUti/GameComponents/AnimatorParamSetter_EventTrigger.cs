@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Animator Param Setter (Event Trigger)")]
+    [Icon(GameComponentsIcon.UNI_ANIMATION)]
+
     public class AnimatorParamSetter_EventTrigger : MonoBehaviour
     {
         [Serializable]

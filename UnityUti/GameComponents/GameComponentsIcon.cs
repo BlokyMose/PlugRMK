@@ -54,9 +54,9 @@ namespace PlugRMK.UnityUti
         public const string QUEST = FOLDER + PREFIX + "quest" + EXTENSION;
         
         public const string SET_CAMERA = FOLDER + PREFIX + "set_camera" + EXTENSION;
-        public const string SET_CAMERAFX = FOLDER + PREFIX + "set_cameraFX" + EXTENSION;
+        public const string SET_CAMERA_FX = FOLDER + PREFIX + "set_cameraFX" + EXTENSION;
         public const string SET_COLORS = FOLDER + PREFIX + "set_colors" + EXTENSION;
-        public const string SET_GAMECONTROLLER = FOLDER + PREFIX + "set_gameController" + EXTENSION;
+        public const string SET_GAME_CONTROLLER = FOLDER + PREFIX + "set_gameController" + EXTENSION;
         public const string SET_GEAR = FOLDER + PREFIX + "set_gear" + EXTENSION;
         public const string SET_SAVE = FOLDER + PREFIX + "set_save" + EXTENSION;
         public const string SET_SCENE = FOLDER + PREFIX + "set_scene" + EXTENSION;
@@ -67,11 +67,11 @@ namespace PlugRMK.UnityUti
         public const string UI_SOUND = FOLDER + PREFIX + "ui_sound" + EXTENSION;
         
         public const string UNI_ANIMATION = FOLDER + PREFIX + "uni_animation" + EXTENSION;
-        public const string UNI_COLLIDERPROXY = FOLDER + PREFIX + "uni_colliderProxy" + EXTENSION;
+        public const string UNI_COLLIDER_PROXY = FOLDER + PREFIX + "uni_colliderProxy" + EXTENSION;
         public const string UNI_GO = FOLDER + PREFIX + "uni_go" + EXTENSION;
         public const string UNI_POS = FOLDER + PREFIX + "uni_pos" + EXTENSION;
         public const string UNI_SCRIPT = FOLDER + PREFIX + "uni_script" + EXTENSION;
-        public const string UNI_SPRITERENDERER = FOLDER + PREFIX + "uni_spriteRenderer" + EXTENSION;
+        public const string UNI_SPRITE_RENDERER = FOLDER + PREFIX + "uni_spriteRenderer" + EXTENSION;
         
         public const string VAR = FOLDER + PREFIX + "var" + EXTENSION;
         public const string WAVE = FOLDER + PREFIX + "wave" + EXTENSION;

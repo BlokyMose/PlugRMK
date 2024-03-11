@@ -5,6 +5,7 @@ using UnityEngine;
 namespace PlugRMK.UnityUti.BasicFunction
 {
     [AddComponentMenu("Unity Utility/Basic/Set Random Sprite (IBasicFuntion)")]
+    [Icon(GameComponentsIcon.UNI_SCRIPT)]
 
     public class SetRandomSprite : MonoBehaviour, IBasicFunction
     {

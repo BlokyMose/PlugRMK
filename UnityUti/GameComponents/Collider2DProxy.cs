@@ -6,7 +6,9 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Collider 2D Proxy")]
+    [Icon(GameComponentsIcon.UNI_COLLIDER_PROXY)]
     [RequireComponent(typeof(Collider2D))]
+
     public class Collider2DProxy : MonoBehaviour
     {
         public Action<Collider2D> OnEnter;

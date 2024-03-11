@@ -4,6 +4,7 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Basic/Animator Param Setter (IBasicFunction)")]
+    [Icon(GameComponentsIcon.UNI_ANIMATION)]
 
     public class AnimatorParamSetter : MonoBehaviour, IBasicFunction
     {

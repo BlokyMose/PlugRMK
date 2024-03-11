@@ -7,6 +7,8 @@ using UnityEngine.VFX;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Visual Effect Setter")]
+    [Icon(GameComponentsIcon.FX)]
+
     public class VisualEffectSetter : MonoBehaviour
     {
         [Serializable]

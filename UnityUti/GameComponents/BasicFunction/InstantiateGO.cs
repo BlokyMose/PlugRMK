@@ -4,6 +4,7 @@ using UnityEngine;
 namespace PlugRMK.UnityUti
 {
     [AddComponentMenu("Unity Utility/Basic/Instantiate GO (IBasicFuntion)")]
+    [Icon(GameComponentsIcon.UNI_SCRIPT)]
 
     public class InstantiateGO : MonoBehaviour, IBasicFunction
     {

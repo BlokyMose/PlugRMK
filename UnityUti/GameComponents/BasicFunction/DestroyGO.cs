@@ -4,6 +4,7 @@ using UnityEngine;
 namespace PlugRMK.UnityUti.BasicFunction
 {
     [AddComponentMenu("Unity Utility/Basic/Destroy GO (IBasicFuntion)")]
+    [Icon(GameComponentsIcon.UNI_SCRIPT)]
 
     public class DestroyGO : MonoBehaviour, IBasicFunction
     {
