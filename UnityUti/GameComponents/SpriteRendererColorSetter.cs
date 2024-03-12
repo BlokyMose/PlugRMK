@@ -47,8 +47,8 @@ namespace PlugRMK.UnityUti
             }
         }
 
-        [Button("Get All SRs")]
-        public void GetAllSpriteRenderersInChildren()
+        [Button("Auto-Set SRs")]
+        public void AutoSetSRs()
         {
             srs.AddIfHasnt(gameObject.GetComponentsInFamily<SpriteRenderer>());
 

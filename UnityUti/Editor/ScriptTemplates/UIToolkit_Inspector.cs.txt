@@ -1,0 +1,64 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+#ROOTNAMESPACEBEGIN#
+    [CustomEditor(typeof(targetType))]
+    public class #SCRIPTNAME# : Editor
+    {
+        public VisualTreeAsset mainTabUXML;
+        targetType targetScript;
+        VisualElement root;
+
+        public override VisualElement CreateInspectorGUI()
+        {
+            root = new VisualElement();
+            targetScript = target as targetType;
+
+            var tabView = new TabView();
+            tabView.Add(MakeMainTab());
+            tabView.Add(MakeFullInspectorTab());
+            root.Add(tabView);
+
+            return root;
+        }
+
+        Tab MakeMainTab()
+        {
+            var mainVE = mainTabUXML.Instantiate();
+            var mainTab = new Tab("Main");
+            mainTab.Add(MakeSpace(6));
+            mainTab.Add(mainVE);
+            return mainTab;
+        }
+
+        Tab MakeFullInspectorTab()
+        {
+            var fullInspector = new VisualElement() { name = "fullInspector" };
+            InspectorElement.FillDefaultInspector(fullInspector, serializedObject, this);
+            var fullInspectorTab = new Tab("Full");
+            fullInspectorTab.Add(MakeSpace(6));
+            fullInspectorTab.Add(fullInspector);
+            return fullInspectorTab;
+        }
+
+        static VisualElement MakeSpace(float space)
+        {
+            var ve = new VisualElement();
+            ve.style.height = new StyleLength(space);
+            ve.style.width = new StyleLength(space);
+            return ve;
+        }
+
+        static Button SetButton(VisualElement root, string buttonName, Action onClick)
+        {
+            var button = root.Q<Button>(buttonName);
+            button.clicked += onClick;
+            return button;
+        }
+    }
+#ROOTNAMESPACEEND#

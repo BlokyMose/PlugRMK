@@ -25,6 +25,10 @@ namespace PlugRMK.UnityUti.Editor
 
         [MenuItem("Assets/Create/New Code/Editor Window", priority = PRIORITY_INDEX)]
         public static void CreateEditorWindow() => CreateScriptFromTemplateName("EditorWindow");
+        
+        [MenuItem("Assets/Create/New Code/UI Toolkit Inspector", priority = PRIORITY_INDEX)]
+        public static void CreateUIToolkitInspector() => CreateScriptFromTemplateName("UIToolkit_Inspector");
+        
         public static void CreateScriptFromTemplateName(string templateName)
         {
             var TEMPLATES = "ScriptTemplates";
