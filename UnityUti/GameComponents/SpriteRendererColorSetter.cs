@@ -58,6 +58,8 @@ namespace PlugRMK.UnityUti
                 if (foundSR != null) 
                     srs.Remove(foundSR);
             }
+
+            srs.RemoveNulls();
         }
 
         #region [Methods: Color]

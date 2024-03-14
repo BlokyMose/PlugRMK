@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static PlugRMK.UnityUti.UIToolkitUtility;
 
 #ROOTNAMESPACEBEGIN#
     [CustomEditor(typeof(targetType))]
@@ -44,21 +45,6 @@ using UnityEngine.UIElements;
             fullInspectorTab.Add(MakeSpace(6));
             fullInspectorTab.Add(fullInspector);
             return fullInspectorTab;
-        }
-
-        static VisualElement MakeSpace(float space)
-        {
-            var ve = new VisualElement();
-            ve.style.height = new StyleLength(space);
-            ve.style.width = new StyleLength(space);
-            return ve;
-        }
-
-        static Button SetButton(VisualElement root, string buttonName, Action onClick)
-        {
-            var button = root.Q<Button>(buttonName);
-            button.clicked += onClick;
-            return button;
         }
     }
 #ROOTNAMESPACEEND#

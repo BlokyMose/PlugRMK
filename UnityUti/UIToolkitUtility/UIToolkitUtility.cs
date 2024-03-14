@@ -1,3 +1,5 @@
+using PlugRMK.GenericUti;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,6 +12,8 @@ namespace PlugRMK.UnityUti
     {
         public enum AnchorVertical { Top, Bottom, Center }
         public enum AnchorHorizontal { Left, Right, Center }
+
+        #region [Size and Position]
 
         public static StyleLength GetPixelLength(float value)
         {
@@ -75,10 +79,32 @@ namespace PlugRMK.UnityUti
             return new(ve.GetX(anchor), ve.GetY(anchor));
         }
 
+        #endregion
+
         public static void SwitchClass(this VisualElement ve, string classNameToRemove, string classNameToAdd)
         {
             ve.RemoveFromClassList(classNameToRemove);
             ve.AddToClassList(classNameToAdd);
+        }
+    
+        public static string GetIndexChoice(this DropdownField dropdown)
+        {
+            return dropdown.choices.GetAt(dropdown.index, "");
+        }
+
+        public static Button SetButton(VisualElement root, string buttonName, Action onClick)
+        {
+            var button = root.Q<Button>(buttonName);
+            button.clicked += onClick;
+            return button;
+        }
+
+        public static VisualElement MakeSpace(float space)
+        {
+            var ve = new VisualElement();
+            ve.style.height = new StyleLength(space);
+            ve.style.width = new StyleLength(space);
+            return ve;
         }
     }
 }

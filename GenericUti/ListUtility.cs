@@ -66,13 +66,6 @@ namespace PlugRMK.GenericUti
                 list.AddIfHasnt(item);
         }
 
-        public static void RemoveNulls<T>(this IList<T> list)
-        {
-            for (int i = list.Count - 1; i >= 0; i--)
-                if (list[i] == null)
-                    list.RemoveAt(i);
-        }
-
         public static T GetRandom<T>(this IList<T> list) where T : class
         {
             if (list.Count == 0)
@@ -95,12 +88,11 @@ namespace PlugRMK.GenericUti
             list.RemoveAt(list.Count-1);
         }
 
-        public static void AddRangeUnique<T>(this IList<T> list, IList<T> otherList)
+        public static void RemoveNulls<T>(this IList<T> list)
         {
-            foreach (var item in otherList)
-            {
-                if (!list.Contains(item)) list.Add(item);
-            }
+            for (int i = list.Count - 1; i >= 0; i--)
+                if (list[i] == null || list[i].ToString() == "null")
+                    list.RemoveAt(i);
         }
 
         /// <summary>return Count == 0</summary>
