@@ -1,0 +1,26 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+using static PlugRMK.UnityUti.UIToolkitUtility;
+
+#ROOTNAMESPACEBEGIN#
+    public class #SCRIPTNAME# : EditorWindow
+    {
+        public VisualTreeAsset mainUXML;
+
+        [MenuItem("Tools/" + nameof(#SCRIPTNAME#))]
+        public static void OpenWindow()
+        {
+            GetWindow <#SCRIPTNAME#>(nameof(#SCRIPTNAME#)).Show();
+        }
+
+        public void CreateGUI()
+        {
+            rootVisualElement.Add(mainUXML.Instantiate());
+        }
+    }
+#ROOTNAMESPACEEND#

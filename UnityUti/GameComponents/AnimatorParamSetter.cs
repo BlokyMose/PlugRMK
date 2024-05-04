@@ -12,9 +12,9 @@ namespace PlugRMK.UnityUti
         Animator animator;
 
         [SerializeField]
-        List<GameplayUtilityClass.AnimatorParameterStatic> parameters = new List<GameplayUtilityClass.AnimatorParameterStatic>();
+        List<GameplayUtilityClass.AnimatorParameterStatic> parameters = new();
 
-         void Awake()
+        void Awake()
         {
             if (animator == null)
                 animator = GetComponent<Animator>();

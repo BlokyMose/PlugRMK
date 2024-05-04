@@ -43,14 +43,36 @@ public class #SCRIPTNAME# : EditorWindow
         return new Vector2(position.width - padding.Horizontal, position.height - padding.Vertical);
     }
 
-    float MakeLabel(Vector2 pos, string labelName, string separator = ":", string tooltip = "")
+    (float width, float height) MakeLabel(Vector2 pos, string labelName, string separator = ":", string tooltip = "")
     {
         var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
         EditorGUI.LabelField(rect, new GUIContent(labelName + separator, tooltip));
-        return rect.width;
+        return (rect.width, rect.height);
     }
 
-    float MakeToggleButton(Vector2 pos, Texture2D icon, ref bool boolValue, string boolName)
+    (float width, float heigth) MakeTextField(Vector2 pos, ref string stringVar)
+    {
+        var rect = new Rect(pos, new Vector2(defaultFieldSize.Width, defaultFieldSize.Height));
+        var textStyle = new GUIStyle(GUI.skin.textField);
+        textStyle.alignment = TextAnchor.MiddleLeft;
+        stringVar = EditorGUI.TextField(rect, stringVar, textStyle);
+        return (rect.width, rect.height);
+    }
+
+    (float width, float height) MakeToggle(Vector2 pos, ref bool boolValue, string boolName)
+    {
+        var rect = new Rect(pos, new Vector2(defaultFieldSize.Width, defaultFieldSize.Height));
+
+        if (boolValue && !GUI.Toggle(rect, boolValue, new GUIContent(boolName)))
+            boolValue = false;
+
+        else if (!boolValue && GUI.Toggle(rect, boolValue, new GUIContent(boolName)))
+            boolValue = true;
+
+        return (rect.width, rect.height);
+    }
+
+    (float width, float height) MakeToggleButton(Vector2 pos, Texture2D icon, ref bool boolValue, string boolName)
     {
         var rect = new Rect(pos, iconSize.Vector2);
         if (boolValue)
@@ -67,10 +89,10 @@ public class #SCRIPTNAME# : EditorWindow
 
         GUI.color = guiColors.Color;
 
-        return rect.width;
+        return (rect.width, rect.height);
     }
 
-    float MakeButton(Vector2 pos, string text, Action onClicked, Color? color = null)
+    (float width, float height) MakeButton(Vector2 pos, string text, Action onClicked, Color? color = null)
     {
         var rect = new Rect(pos, iconSize.Vector2);
 
@@ -82,14 +104,14 @@ public class #SCRIPTNAME# : EditorWindow
 
         GUI.color = guiColors.Color;
 
-        return rect.width;
+        return (rect.width, rect.height);
     }
 
-    float MakeFloatInput(Vector2 pos, ref float floatVar)
+    (float width, float height) MakeFloatInput(Vector2 pos, ref float floatVar)
     {
         var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
         floatVar = EditorGUI.FloatField(rect, floatVar);
-        return rect.width;
+        return (rect.width, rect.height);
     }
 
     #endregion
@@ -122,8 +144,8 @@ public class #SCRIPTNAME# : EditorWindow
                 float MakeDataField(LogData data, Vector2 pos)
                 {
                     var fieldPos = new EditorPos(pos);
-                    fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.name));
-                    fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.data.ToString(), ""));
+                    fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.name).width);
+                    fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.data.ToString(), "").width);
                     return defaultFieldSize.Height;
                 }
             */

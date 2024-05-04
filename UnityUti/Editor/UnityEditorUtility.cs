@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PlugRMK.UnityUti.Editor
 {
-    public static class EditorUtility
+    public static class UnityEditorUtility
     {
         public static T LoadAsset<T>(string assetName) where T:Object
         {
