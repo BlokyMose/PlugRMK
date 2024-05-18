@@ -1,5 +1,4 @@
 using PlugRMK.GenericUti;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,11 +15,8 @@ namespace PlugRMK.UnityUti
         [Serializable]
         public class EventProperty
         {
-            [LabelWidth(85)]
             public string eventName;
-            [HorizontalGroup, LabelWidth(85), LabelText("Auto Invoke"), GUIColor("@"+nameof(isAutoInvoke)+"?"+"Color.green"+":" + "Color.gray")]
             public bool isAutoInvoke = true;
-            [HorizontalGroup, LabelWidth(45)]
             public float delay = -1;
             public UnityEvent onInvoke;
 
@@ -46,7 +42,6 @@ namespace PlugRMK.UnityUti
 
         public bool autoInvoke = true;
 
-        [ShowIf(nameof(autoInvoke))]
         public UnityInitialMethod invokeWhen;
 
         public List<EventProperty> events = new();

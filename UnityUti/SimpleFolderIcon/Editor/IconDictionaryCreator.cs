@@ -6,8 +6,7 @@ namespace SimpleFolderIcon.Editor
 {
     public class IconDictionaryCreator : AssetPostprocessor
     {
-        private const string AssetsPath = @"PlugRMK\UnityUti\SimpleFolderIcon\Icons";
-        private const string AssetsPath_Absolute = "PlugRMK/UnityUti/SimpleFolderIcon/Icons";
+        private const string AssetsPath = "PlugRMK/UnityUti/SimpleFolderIcon/Icons";
         internal static Dictionary<string, Texture> IconDictionary;
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
@@ -27,7 +26,7 @@ namespace SimpleFolderIcon.Editor
         {
             foreach (string str in assets)
             {
-                if (Path.GetDirectoryName(str) == @"Assets\" + AssetsPath)
+                if (Path.GetDirectoryName(str) == $"Assets/{AssetsPath}")
                 {
                     return true;
                 }
@@ -39,11 +38,11 @@ namespace SimpleFolderIcon.Editor
         {
             var dictionary = new Dictionary<string, Texture>();
 
-            var dir = new DirectoryInfo(Application.dataPath + @"\" + AssetsPath);
+            var dir = new DirectoryInfo($"{Application.dataPath}/{AssetsPath}");
             FileInfo[] info = dir.GetFiles("*.png");
             foreach(FileInfo f in info)
             {
-                var texture = (Texture)AssetDatabase.LoadAssetAtPath($"Assets/{AssetsPath_Absolute}/{f.Name}", typeof(Texture2D));
+                var texture = (Texture)AssetDatabase.LoadAssetAtPath($"Assets/{AssetsPath}/{f.Name}", typeof(Texture2D));
                 dictionary.Add(Path.GetFileNameWithoutExtension(f.Name),texture);
             }
             IconDictionary = dictionary;

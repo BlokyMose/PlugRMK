@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace PlugRMK.UnityUti.Hext
     {
         public List<HierarchyExtStyle> styles = new();
 
-        [Button, PropertyOrder(-1)]
+        [ContextMenu(nameof(InstantiateToScene))]
         public void InstantiateToScene()
         {
 #if UNITY_EDITOR

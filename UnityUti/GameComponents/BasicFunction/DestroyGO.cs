@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace PlugRMK.UnityUti.BasicFunction
@@ -9,8 +8,6 @@ namespace PlugRMK.UnityUti.BasicFunction
     public class DestroyGO : MonoBehaviour, IBasicFunction
     {
         public bool isDestroySelf = false;
-
-        [HideIf(nameof(isDestroySelf))]
         public GameObject target;
 
         public void Invoke()

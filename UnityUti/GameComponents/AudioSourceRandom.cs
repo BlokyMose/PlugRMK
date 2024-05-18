@@ -1,5 +1,4 @@
 using PlugRMK.GenericUti;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,25 +19,18 @@ namespace PlugRMK.UnityUti
         {
             public string packName = "";
 
-            [LabelText("Possible Clips")]
             public List<AudioClip> clips = new List<AudioClip>();
 
-            [HorizontalGroup("Volume", 0.66f)]
             public float volume = 1f;
             
-            [HorizontalGroup("Volume"), LabelText("+/-"), LabelWidth(25)]
             public float volumeRandomRange = 0f;
 
-            [HorizontalGroup("Pitch", 0.66f)]
             public float pitch = 1f;
 
-            [HorizontalGroup("Pitch"), LabelText("+/-"), LabelWidth(25)]
             public float pitchRandomRange = 0.15f;
 
-            [HorizontalGroup("Delay", 0.66f)]
             public float delay = 0f;
 
-            [HorizontalGroup("Delay"), LabelText("+/-"), LabelWidth(25)]
             public float delayRandomRange = 0f;
 
             public IEnumerator Play(AudioSource audioSource)
@@ -64,59 +56,59 @@ namespace PlugRMK.UnityUti
             }
         }
 
-
         [SerializeField, Range(0,1)]
         float playProbability = 1f;
 
         [SerializeField]
         List<AudioPack> audioPacks = new();
 
-        [FoldoutGroup("Audio Source"), SerializeField]
+        [Header("Audio Source")]
+        [SerializeField]
         AudioClip audioClip;
 
-        [FoldoutGroup("Audio Source"), SerializeField]
+        [SerializeField]
         AudioMixerGroup output;
 
-        [FoldoutGroup("Audio Source"), SerializeField]
+        [SerializeField]
         bool mute;
 
-        [FoldoutGroup("Audio Source"), SerializeField]
+        [SerializeField]
         bool bypassEffect;
 
-        [FoldoutGroup("Audio Source"), SerializeField]
+        [SerializeField]
         bool bypassListenerEffect;
 
-        [FoldoutGroup("Audio Source"), SerializeField]
+        [SerializeField]
         bool bypassReverbZones;
 
-        [HorizontalGroup("Audio Source/Awake"), SerializeField, LabelText("Play On")]
+        [SerializeField]
         bool playOnAwake = true;
 
-        [HorizontalGroup("Audio Source/Awake", 80f), SerializeField, LabelWidth(1f)]
+        [SerializeField]
         UnityInitialMethod invokeIn = UnityInitialMethod.Awake;
 
-        [FoldoutGroup("Audio Source"), SerializeField]  
+        [SerializeField]  
         bool loop;
 
-        [FoldoutGroup("Audio Source"), SerializeField, ShowIf(nameof(loop))]
+        [SerializeField]
         float loopPeriod = 3f;
 
-        [FoldoutGroup("Audio Source"), SerializeField, Range(0,256)]
+        [SerializeField, Range(0,256)]
         int priority = 128;
 
-        [FoldoutGroup("Audio Source"), SerializeField, Range(0,1)]
+        [SerializeField, Range(0,1)]
         float volume = 1;
 
-        [FoldoutGroup("Audio Source"), SerializeField, Range(-3,3)]
+        [SerializeField, Range(-3,3)]
         float pitch = 1;
 
-        [FoldoutGroup("Audio Source"), SerializeField, Range(-1,1)]
+        [SerializeField, Range(-1,1)]
         float stereoPan = 0;
 
-        [FoldoutGroup("Audio Source"), SerializeField, Range(0,1)]
+        [SerializeField, Range(0,1)]
         float spatialBlend;
 
-        [FoldoutGroup("Audio Source"), SerializeField, Range(0,1.1f)]
+        [SerializeField, Range(0,1.1f)]
         float reverbZoneMix = 1;
 
         AudioSource audioSource;
@@ -157,7 +149,7 @@ namespace PlugRMK.UnityUti
             }
         }
 
-        [FoldoutGroup("Audio Source"), Button("Sync")]
+        [ContextMenu("Sync")]
         void SyncAudioSourceProperties()
         {
             if (audioSource == null)
@@ -180,7 +172,7 @@ namespace PlugRMK.UnityUti
             audioSource.reverbZoneMix = reverbZoneMix;
         }
 
-        [HorizontalGroup("Buttons"), Button, PropertyOrder(-1)]
+        [ContextMenu("Play")]
         public void Play()
         {
 #if UNITY_EDITOR

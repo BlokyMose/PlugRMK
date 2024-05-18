@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,11 +13,11 @@ namespace PlugRMK.UnityUti
         {
             public enum DataType { Float, Int, Bool, Trigger }
 
-            [SerializeField, HorizontalGroup("1")]
+            [SerializeField]
             protected string paramName;
             public string ParamName => paramName;
 
-            [SerializeField, HorizontalGroup("2")]
+            [SerializeField]
             protected DataType dataType;
             public DataType Type => dataType;
 
@@ -72,19 +71,18 @@ namespace PlugRMK.UnityUti
             }
         }
 
-
         [Serializable]
         public class AnimatorParameterStatic : AnimatorParameter
         {
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f), SuffixLabel("value", true), ShowIf("@" + nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Int))]
+            [SerializeField]
             protected int intValue;
             public override int IntValue => intValue;
 
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f), SuffixLabel("value", true), ShowIf("@" + nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Float))]
+            [SerializeField]
             protected float floatValue;
             public override float FloatValue => floatValue;
 
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f), SuffixLabel("value", true), ShowIf("@" + nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Bool))]
+            [SerializeField]
             protected bool boolValue;
             public override bool BoolValue => boolValue;
 
@@ -122,42 +120,29 @@ namespace PlugRMK.UnityUti
         {
             public enum NumberRandomMode { Between, List }
 
-            [SerializeField, LabelText("Mode"), PropertyOrder(-1)]
+            [SerializeField]
             protected NumberRandomMode numberRandomMode;
 
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f),  
-                ShowIf("@" +    nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Int) + " && " +
-                                nameof(numberRandomMode) + "==" + nameof(NumberRandomMode) + "." + nameof(NumberRandomMode.List))]
+            [SerializeField]
             protected List<int> intRandomList;
             public List<int> IntRandomList => intRandomList;
 
 
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f), 
-                ShowIf("@" +    nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Int) + " && " +
-                                nameof(numberRandomMode) + "==" + nameof(NumberRandomMode) + "." + nameof(NumberRandomMode.Between))]
-
+            [SerializeField]
             protected Vector2Int intRandomBetween;
             public Vector2Int IntRandomBetween => intRandomBetween;
 
 
-
-
-
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f), 
-                ShowIf("@" +    nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Float) + " && " +
-                                nameof(numberRandomMode) + "==" + nameof(NumberRandomMode) + "." + nameof(NumberRandomMode.List))]
+            [SerializeField]
             protected List<float> floatRandomList;
             public List<float> FloatRandomList => floatRandomList;
 
 
-            [SerializeField, HorizontalGroup("2"), LabelWidth(0.1f),
-                ShowIf("@" +    nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Float) + " && " +
-                                nameof(numberRandomMode) + "==" + nameof(NumberRandomMode) + "." + nameof(NumberRandomMode.Between))]
-
+            [SerializeField]
             protected Vector2 floatRandomBetween;
             public Vector2 FloatRandomBetween => floatRandomBetween;
 
-            [SerializeField, HorizontalGroup("2"), LabelText("True:"), LabelWidth(25f), Range(0f,1f), ShowIf("@" + nameof(dataType) + "==" + nameof(DataType) + "." + nameof(DataType.Bool))]
+            [SerializeField]
             protected float boolTrueChance;
             public float BoolTrueChance => boolTrueChance;
 
@@ -222,6 +207,5 @@ namespace PlugRMK.UnityUti
                 this.boolTrueChance = boolTrueChance;
             }
         }
-
     }
 }

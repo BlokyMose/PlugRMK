@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +13,7 @@ namespace PlugRMK.UnityUti
         [Serializable]
         public class AnimatorParameterEvent : GameplayUtilityClass.AnimatorParameterStatic
         {
-            [SerializeField, HorizontalGroup("1"), LabelWidth(0.1f)]
+            [SerializeField]
             EventTriggerType triggerType;
             public EventTriggerType TriggerType => triggerType;
 

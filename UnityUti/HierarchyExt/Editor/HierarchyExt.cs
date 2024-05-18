@@ -19,7 +19,7 @@ namespace PlugRMK.UnityUti.Hext
         {
             dataArray = AssetDatabase.FindAssets("t:"+nameof(HierarchyExtStyleList));
 
-            if (dataArray != null)
+            if (dataArray != null && dataArray.Length > 0)
             {
                 path = AssetDatabase.GUIDToAssetPath(dataArray[0]);
                 extStyleList = AssetDatabase.LoadAssetAtPath<HierarchyExtStyleList>(path);

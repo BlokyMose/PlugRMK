@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,13 +19,10 @@ namespace PlugRMK.UnityUti
             public string varName;
             public VarType varType;
 
-            [ShowIf("@"+nameof(varType)+ "=="+ nameof(VarType)+"."+nameof(VarType.Bool)), LabelText("value")]
             public bool boolValue;
             
-            [ShowIf("@"+nameof(varType)+ "=="+nameof(VarType)+"."+nameof(VarType.Float)), LabelText("value")]
             public float floatValue;
 
-            [ShowIf("@" + nameof(varType) + "==" +nameof(VarType)+"."+ nameof(VarType.Int)), LabelText("value")]
             public int intValue;
 
 
@@ -52,7 +48,6 @@ namespace PlugRMK.UnityUti
 
         [SerializeField]
         List<SetterProperty> setters = new();
-
 
         void Awake()
         {

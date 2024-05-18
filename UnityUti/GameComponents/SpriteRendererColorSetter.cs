@@ -1,5 +1,4 @@
 using PlugRMK.GenericUti;
-using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,7 +46,7 @@ namespace PlugRMK.UnityUti
             }
         }
 
-        [Button("Auto-Set SRs")]
+        [ContextMenu("Auto-Set SRs")]
         public void AutoSetSRs()
         {
             srs.AddIfHasnt(gameObject.GetComponentsInFamily<SpriteRenderer>());

@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace PlugRMK.UnityUti
@@ -11,16 +10,16 @@ namespace PlugRMK.UnityUti
         [SerializeField]
         GameObject prefab;
 
-        [HorizontalGroup("scale", 10), SerializeField, LabelWidth(0.1f)]
+        [SerializeField]
         bool isOverrideScale = false;
 
-        [HorizontalGroup("scale"), SerializeField, EnableIf(nameof(isOverrideScale))]
+        [SerializeField]
         Vector2 scaleOverride = Vector2.one;
 
-        [HorizontalGroup("rotation", 10), SerializeField, LabelWidth(0.1f)]
+        [SerializeField]
         bool isOverrideRotation = false;
 
-        [HorizontalGroup("rotation"), SerializeField, EnableIf(nameof(isOverrideRotation))]
+        [SerializeField]
         Vector3 rotationOverride = Vector3.zero;
 
         public void Invoke()

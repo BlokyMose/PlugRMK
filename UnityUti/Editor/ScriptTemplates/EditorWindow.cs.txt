@@ -107,10 +107,44 @@ public class #SCRIPTNAME# : EditorWindow
         return (rect.width, rect.height);
     }
 
-    (float width, float height) MakeFloatInput(Vector2 pos, ref float floatVar)
+    (float width, float height) MakeFloatField(Vector2 pos, ref float floatVar)
     {
         var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
         floatVar = EditorGUI.FloatField(rect, floatVar);
+        return (rect.width, rect.height);
+    }
+
+    (float width, float height) MakeIntField(Vector2 pos, ref int intVar)
+    {
+        var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
+        var textStyle = new GUIStyle(GUI.skin.textField);
+        textStyle.alignment = TextAnchor.MiddleLeft;
+        intVar = EditorGUI.IntField(rect, intVar, textStyle);
+        return (rect.width, rect.height);
+    }
+
+    (float width, float height) MakeVector2Field(Vector2 pos, ref Vector2 vector2Var, string vector2Name)
+    {
+        var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
+        var textStyle = new GUIStyle(GUI.skin.textField);
+        textStyle.alignment = TextAnchor.MiddleLeft;
+        vector2Var = EditorGUI.Vector2Field(rect, vector2Name, vector2Var);
+        return (rect.width, rect.height);
+    }
+
+    (float width, float height) MakeVector3Field(Vector2 pos, ref Vector3 vector3Var, string vector2Name)
+    {
+        var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
+        var textStyle = new GUIStyle(GUI.skin.textField);
+        textStyle.alignment = TextAnchor.MiddleLeft;
+        vector3Var = EditorGUI.Vector3Field(rect, vector2Name, vector3Var);
+        return (rect.width, rect.height);
+    }
+
+    (float width, float height) MakeObjectField<T>(Vector2 pos, ref T objectVar) where T : UnityEngine.Object
+    {
+        var rect = new Rect(pos, new Vector2(defaultFieldSize.Width / 2, defaultFieldSize.Height));
+        objectVar = (T)EditorGUI.ObjectField(rect, (UnityEngine.Object) objectVar, typeof(T), true);
         return (rect.width, rect.height);
     }
 
@@ -132,22 +166,23 @@ public class #SCRIPTNAME# : EditorWindow
 
         void OnMakeContent()
         {
-            /*  TODO: Make columns and rows of contents, like:
-            
-                var contentPos = new EditorPos(pos.Vector2);
-                var dataList = LogMonitorRelay.Instance.dataList;
-                foreach (var data in dataList)
-                {
-                    contentPos.AddRow(MakeDataField(data, contentPos.Vector2));
-                }
+            /* Example:
+
+            var contentPos = new EditorPos(pos.Vector2);
+            var dataList = new List<(string,int)>() { ("first", 1), ("second", 2) };
+            foreach (var data in dataList)
+            {
+                contentPos.AddRow(MakeDataField(data, contentPos.Vector2));
+            }
                 
-                float MakeDataField(LogData data, Vector2 pos)
-                {
-                    var fieldPos = new EditorPos(pos);
-                    fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.name).width);
-                    fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.data.ToString(), "").width);
-                    return defaultFieldSize.Height;
-                }
+            float MakeDataField((string name, int value) data, Vector2 pos)
+            {
+                var fieldPos = new EditorPos(pos);
+                fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.name).width);
+                fieldPos.AddColumn(MakeLabel(fieldPos.Vector2, data.value.ToString(), "").width);
+                return defaultFieldSize.Height;
+            }
+
             */
         }
     }
@@ -155,7 +190,7 @@ public class #SCRIPTNAME# : EditorWindow
     Vector2 GetContentSize()
     {
         Vector2 size = default;
-        // TODO: Calculate the size of the scroll view content
+        // Calculate the size of the scroll view content based on your data
         return size;
     }
     
