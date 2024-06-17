@@ -22,6 +22,12 @@ namespace PlugRMK.UnityUti
             return targetComponent != null;
         }
 
+        public static bool TryGetComponentInFamily<T>(this GameObject thisGO, out T targetComponent) where T : Component
+        {
+            targetComponent = thisGO.GetComponentInFamily<T>();
+            return targetComponent != null;
+        }
+
         public static bool TryGetComponentInChildren<T>(this Component thisComponent, out T targetComponent) where T : Component
         {
             targetComponent = thisComponent.GetComponentInChildren<T>();
