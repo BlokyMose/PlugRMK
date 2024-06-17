@@ -78,9 +78,9 @@ namespace PlugRMK.GenericUti
             return list[new Random().Next(0, list.Count)];
         }
 
-        public static void RemoveIfHas<T>(this IList<T> list, T addValue)
+        public static void RemoveIfHas<T>(this IList<T> list, T removeValue)
         {
-            if (!list.Contains(addValue)) list.Remove(addValue);
+            if (list.Contains(removeValue)) list.Remove(removeValue);
         }
 
         public static void RemoveLast<T>(this IList<T> list)
