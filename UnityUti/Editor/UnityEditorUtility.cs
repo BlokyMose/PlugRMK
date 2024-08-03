@@ -23,7 +23,7 @@ namespace PlugRMK.UnityUti.Editor
             foreach (var guid in guids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
-                list.Add(LoadAsset<T>(path));
+                list.Add(AssetDatabase.LoadAssetAtPath<T>(path));
             }
             return list;
         }
