@@ -10,7 +10,11 @@ namespace PlugRMK.UnityUti
         public static void SetPosX(this Transform transform, float x) => transform.position = new(x, transform.position.y, transform.position.z);
         public static void SetPosY(this Transform transform, float y) => transform.position = new(transform.position.x, y, transform.position.z);
         public static void SetPosZ(this Transform transform, float z) => transform.position = new(transform.position.x, transform.position.y, z);
-        
+
+        public static void SetLocalPosX(this Transform transform, float x) => transform.localPosition = new(x, transform.localPosition.y, transform.localPosition.z);
+        public static void SetLocalPosY(this Transform transform, float y) => transform.localPosition = new(transform.localPosition.x, y, transform.localPosition.z);
+        public static void SetLocalPosZ(this Transform transform, float z) => transform.localPosition = new(transform.localPosition.x, transform.localPosition.y, z);
+
         public static void IncrementPosX(this Transform transform, float increment) => transform.position = new(transform.position.x + increment, transform.position.y, transform.position.z);
         public static void IncrementPosY(this Transform transform, float increment) => transform.position = new(transform.position.x, transform.position.y + increment, transform.position.z);
         public static void IncrementPosZ(this Transform transform, float increment) => transform.position = new(transform.position.x, transform.position.y, transform.position.z + increment);

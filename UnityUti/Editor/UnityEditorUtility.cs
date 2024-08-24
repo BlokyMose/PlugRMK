@@ -7,7 +7,7 @@ namespace PlugRMK.UnityUti.Editor
 {
     public static class UnityEditorUtility
     {
-        public static T LoadAsset<T>(string assetName) where T:Object
+        public static T LoadAsset<T>(string assetName = "") where T:Object
         {
             var guids = AssetDatabase.FindAssets($"t:{typeof(T).Name} {assetName}");
             if (guids.Length == 0)
@@ -16,7 +16,7 @@ namespace PlugRMK.UnityUti.Editor
             return AssetDatabase.LoadAssetAtPath<T>(path);
         }
 
-        public static List<T> LoadAssets<T>(string assetName) where T : Object
+        public static List<T> LoadAssets<T>(string assetName = "") where T : Object
         {
             var list = new List<T>();
             var guids = AssetDatabase.FindAssets($"t:{typeof(T).Name} {assetName}");

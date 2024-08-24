@@ -128,5 +128,11 @@ namespace PlugRMK.GenericUti
                 if (item == targetItem) return true;
             return false;
         }
+
+        public static bool TryFind<T>(this List<T> list, Predicate<T> predicate, out T result)
+        {
+            result = list.Find(predicate);
+            return result != null;
+        }
     }
 }

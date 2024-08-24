@@ -155,6 +155,16 @@ namespace PlugRMK.GenericUti
             return new(Between(min.x, max.x, ratio), Between(min.y, max.y, ratio), Between(min.z, max.z, ratio));
         }
 
+        public static bool IsBetween(this int value, int min, int max)
+        {
+            return value >= min && value <= max;
+        }
+
+        public static bool IsBetween(this float value, float min, float max)
+        {
+            return value > min && value < max;
+        }
+
         public enum DistanceCalcMode { XY, XZ, YZ, XYZ }
         public static float Distance(Vector3 a, Vector3 b, DistanceCalcMode mode)
         {

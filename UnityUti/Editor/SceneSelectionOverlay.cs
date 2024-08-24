@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
@@ -37,12 +38,22 @@ public class SceneSelectionOverlay : ToolbarOverlay
         {
             var menu = new GenericMenu();
             var currentScene = EditorSceneManager.GetActiveScene();
-            var sceneGuids = AssetDatabase.FindAssets("t:scene", null);
-            for (int i = 0; i < sceneGuids.Length; i++)
+            var sceneWithLabelGuids = AssetDatabase.FindAssets("t:scene l:Scene", null).ToList();
+            for (int i = 0; i < sceneWithLabelGuids.Count; i++)
             {
+                var path = AssetDatabase.GUIDToAssetPath(sceneWithLabelGuids[i]);
+                var name = Path.GetFileNameWithoutExtension(path);
+                menu.AddItem(new GUIContent(name), string.Compare(currentScene.name, name) == 0, () => OpenScene(currentScene, path));
+            }
+
+            var sceneGuids = AssetDatabase.FindAssets("t:scene", null).ToList();
+            for (int i = 0; i < sceneGuids.Count; i++)
+            {
+                if (sceneWithLabelGuids.Contains(sceneGuids[i]))
+                    continue;
                 var path = AssetDatabase.GUIDToAssetPath(sceneGuids[i]);
                 var name = Path.GetFileNameWithoutExtension(path);
-                menu.AddItem(new GUIContent(name), string.Compare(currentScene.name,name)==0, () => OpenScene(currentScene, path));
+                menu.AddItem(new GUIContent("Other/"+name), string.Compare(currentScene.name,name)==0, () => OpenScene(currentScene, path));
             }
             menu.ShowAsContext();
         }
@@ -56,7 +67,7 @@ public class SceneSelectionOverlay : ToolbarOverlay
             }
             else
             {
-                    EditorSceneManager.OpenScene(path);
+                EditorSceneManager.OpenScene(path);
             }
         }
     }

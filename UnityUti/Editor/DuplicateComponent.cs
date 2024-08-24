@@ -8,7 +8,7 @@ namespace PlugRMK.UnityUti
 {
     public static class DuplicateComponent
     {
-        private const string DUPLICATE_PATH = "CONTEXT/Component/Duplicate";
+        private const string DUPLICATE_PATH = "CONTEXT/Component/Duplicate Component";
 
         [MenuItem(DUPLICATE_PATH)]
         public static void Duplicate(MenuCommand command)

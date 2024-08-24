@@ -130,5 +130,10 @@ namespace PlugRMK.UnityUti
                 Object.DestroyImmediate(parent.GetChild(i).gameObject);
         }
 
+        public static void SetActiveChildren(this Transform parent, bool isActive)
+        {
+            for (int i = parent.childCount - 1; i >= 0; i--)
+                parent.GetChild(i).gameObject.SetActive(isActive);
+        }
     }
 }
