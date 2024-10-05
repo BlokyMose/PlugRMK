@@ -71,6 +71,11 @@ namespace PlugRMK.GenericUti
             if (list.Count == 0)
                 return null;
             return list[new Random().Next(0, list.Count)];
+        }        
+        
+        public static int GetRandomIndex<T>(this IList<T> list) where T : class
+        {
+            return new Random().Next(0, list.Count);
         }
 
         public static T GetRandomStruct<T>(this IList<T> list) where T : struct
@@ -133,6 +138,25 @@ namespace PlugRMK.GenericUti
         {
             result = list.Find(predicate);
             return result != null;
+        }
+
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            var rnd = new Random();
+            var n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                var k = rnd.Next(n + 1);
+                (list[n], list[k]) = (list[k], list[n]);
+            }
+        }
+        
+        public static IList<T> ShuffleNew<T>(this IList<T> list)
+        {
+            var newList = new List<T>(list);
+            newList.Shuffle();
+            return newList;
         }
     }
 }

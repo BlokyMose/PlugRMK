@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace PlugRMK.UnityUti.Editor
+namespace PlugRMK.UnityUti.EditorUti
 {
     public static class Vector3ContextProperties
     {

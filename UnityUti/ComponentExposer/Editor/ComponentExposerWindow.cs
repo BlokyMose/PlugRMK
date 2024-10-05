@@ -7,10 +7,10 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static PlugRMK.UnityUti.UIToolkitUtility;
-using static PlugRMK.UnityUti.Editor.UnityEditorUtility;
+using static PlugRMK.UnityUti.EditorUti.UnityEditorUtility;
 using static PlugRMK.GenericUti.StringUtility;
 
-namespace PlugRMK.UnityUti.Editor
+namespace PlugRMK.UnityUti.EditorUti
 {
     public class ComponentExposerWindow : EditorWindow
     {

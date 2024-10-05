@@ -5,11 +5,12 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace PlugRMK.UnityUti.Editor
+namespace PlugRMK.UnityUti.EditorUti
 {
     public static class CreateScriptTemplate
     {
         const int PRIORITY_INDEX = -100;
+        const string TEMPLATES = "ScriptTemplates";
 
         [MenuItem("Assets/Create/New Code/MonoBehaviour", priority = PRIORITY_INDEX)]
         public static void CreateMonoBehaviour() => CreateScriptFromTemplateName("MonoBehaviour");
@@ -33,19 +34,26 @@ namespace PlugRMK.UnityUti.Editor
 
         public static void CreateScriptFromTemplateName(string templateName)
         {
-            var TEMPLATES = "ScriptTemplates";
-            var parentPath = GetParentPath(nameof(CreateScriptTemplate));
+            var parentPath = GetParentPath(nameof(CreateScriptTemplate), templateName);
             var templatePath = parentPath + "/" + TEMPLATES + "/" + templateName + ".cs.txt";
 
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, "New"+templateName+".cs");
         }
 
-        public static string GetParentPath(string assetName)
+        public static string GetParentPath(string assetName, string childFileName)
         {
             var guids = AssetDatabase.FindAssets(assetName);
-            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            var folderPath = path[..(path.Length - "/".Length - assetName.Length - ".cs".Length )];
-            return folderPath;
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var folderPath = path[..(path.Length - "/".Length - assetName.Length - ".cs".Length )];
+                var templatePath = folderPath + "/" + TEMPLATES + "/" + childFileName + ".cs.txt";
+                if (File.Exists(templatePath))
+                    return folderPath;
+            }
+
+            Debug.LogError($"Cannot find parent path of {childFileName}\nGUID count: {guids.Length}");
+            return "";
         }
     }
 }

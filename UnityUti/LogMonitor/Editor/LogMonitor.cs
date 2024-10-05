@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using static PlugRMK.UnityUti.LogMonitorRelay;
 
-namespace PlugRMK.UnityUti.Editor
+namespace PlugRMK.UnityUti.EditorUti
 {
     public class LogMonitor : EditorWindow
     {
