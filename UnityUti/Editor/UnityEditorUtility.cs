@@ -27,5 +27,15 @@ namespace PlugRMK.UnityUti.EditorUti
             }
             return list;
         }
+
+        public static string GetParentPath(string search, string extension)
+        {
+            var guids = AssetDatabase.FindAssets($"{search}");
+            if (guids.Length == 0)
+                return null;
+            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            var folderPath = path[..(path.Length - "/".Length - search.Length - extension.Length)];
+            return folderPath;
+        }
     }
 }
