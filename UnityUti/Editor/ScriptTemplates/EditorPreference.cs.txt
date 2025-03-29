@@ -1,0 +1,51 @@
+using UnityEditor;
+using UnityEngine;
+
+#ROOTNAMESPACEBEGIN#
+public class #SCRIPTNAME#: SettingsProvider
+{
+    public const string BOOL_KEY = "Bool variable";
+
+    public static bool BoolValue
+    {
+        get => EditorPrefs.GetBool(BOOL_KEY, false);
+        set => EditorPrefs.SetBool(BOOL_KEY, value);
+    }
+
+    public #SCRIPTNAME#(string path, SettingsScope scopes = SettingsScope.User) : base(path, scopes)
+    {
+    }
+
+    public override void OnGUI(string searchContext)
+    {
+        base.OnGUI(searchContext);
+        GUILayout.Space(20f);
+
+        var boolValue = BoolValue;
+        var _boolValue = EditorGUILayout.Toggle(BOOL_KEY, boolValue, GUILayout.Width(200f));
+        if (_boolValue != boolValue)
+            BoolValue = _boolValue;
+    }
+
+    [SettingsProvider]
+    public static SettingsProvider CreateSettingsProvider()
+    {
+        return new #SCRIPTNAME#("Tools/#SCRIPTNAME#", SettingsScope.User);
+    }
+}
+
+/*
+[InitializeOnLoad]
+public static class #SCRIPTNAME#Initializer
+{
+    static #SCRIPTNAME#Initializer()
+    {
+        if (EditorPrefs.HasKey(#SCRIPTNAME#.BOOL_KEY))
+        {
+            #SCRIPTNAME#.BoolValue = EditorPrefs.GetBool(#SCRIPTNAME#.BOOL_KEY, false);
+            // TODO: Initialize other settings that use BoolValue
+        }
+    }
+}
+*/
+#ROOTNAMESPACEEND#

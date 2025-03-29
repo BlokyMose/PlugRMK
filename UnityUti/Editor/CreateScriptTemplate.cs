@@ -29,8 +29,12 @@ namespace PlugRMK.UnityUti.EditorUti
         
         [MenuItem("Assets/Create/New Code/UI Toolkit Inspector", priority = PRIORITY_INDEX)]
         public static void CreateUIToolkitInspector() => CreateScriptFromTemplateName("UIToolkit_Inspector");
+        
         [MenuItem("Assets/Create/New Code/UI Toolkit Window", priority = PRIORITY_INDEX)]
         public static void CreateUIToolkitWindow() => CreateScriptFromTemplateName("UIToolkit_Window");
+        
+        [MenuItem("Assets/Create/New Code/Editor Preference", priority = PRIORITY_INDEX)]
+        public static void CreateEditorPreference() => CreateScriptFromTemplateName("EditorPreference");
 
         public static void CreateScriptFromTemplateName(string templateName)
         {
