@@ -11,8 +11,8 @@ namespace SwingHero
         enum ShootType { Single, Batch };
         ShootType shootType = ShootType.Single;
         string fileName = "ImageName";
-        const string FILE_NAME = "{FILE_NAME}";
-        string batchFileNameFormat = $"{FILE_NAME}";
+        const string OBJECT_NAME = "{OBJECT_NAME}";
+        string batchFileNameFormat = $"{OBJECT_NAME}";
         Transform batchParent;
         Vector2Int imageSize = new(256, 256);
         Camera camera;
@@ -116,7 +116,7 @@ namespace SwingHero
             foreach (Transform child in batchParent)
             {
                 child.gameObject.SetActive(true);
-                var fileName = batchFileNameFormat.Replace(FILE_NAME, child.name);
+                var fileName = batchFileNameFormat.Replace(OBJECT_NAME, child.name);
                 Export($"{folderPath}/{fileName}.png");
                 child.gameObject.SetActive(false);
             }
