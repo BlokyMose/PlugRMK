@@ -1,25 +1,35 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 public class BoxColToolboxWindow : EditorWindow
 {
     public enum PosPivot { Center, TopRight, BottomRight, BottomLeft, TopLeft, Custom }
-    public enum ScaleDirection { All, Corner }
-
+    
+    int tabIndex;
     bool isActive = true;
     GameObject boxPrefab;
     PosPivot handlePosPivot;
-    bool isUsingScale;
-    ScaleDirection scaleDirection;
-    Vector3 handlePosOffset, handleScaleOffset;
-    Vector3 startHandlePos, endHandlePos, scaleHandlePos;
-    Quaternion startHandleRot, endHandleRot, scaleHandleRot;
+    Vector3 handlePosOffset;
+    Vector3 startHandlePos, endHandlePos;
+    Quaternion startHandleRot, endHandleRot;
     BoxCollider currentBox;
     Vector3 currentBoxOriginalSize;
     Vector3 currentBoxOriginalCenter;
+
+    bool chain_drawGizmos = true;
+    GameObject chain_parent;
+    bool chain_closeLoop = true;
+    bool chain_overridePivot = false;
+    PosPivot chain_posPivot = PosPivot.BottomRight;
+    bool chain_overrideSize = false;
+    Vector2 chain_size = new(1, 1);
+    bool chain_liveUpdate = false;
+
     static readonly Color COLOR_GREEN = new(0, 1, 0, .5f);
-    static readonly Color COLOR_BLUE = new(0, 0, 1, .5f);
+    static readonly Color COLOR_YELLOW = new(1, 1, 0, .5f);
 
     [MenuItem("Tools/Box Col Toolbox")]
     public static void OpenWindow()
@@ -55,21 +65,102 @@ public class BoxColToolboxWindow : EditorWindow
             SceneView.RepaintAll();
         }
     }
-    
+
+    void OnSceneGUI(SceneView view)
+    {
+        if (isActive && currentBox != null)
+        {
+            CreatePosHandles();
+            ModifyBoxByHandles();
+            UpdateHandlesRot();
+        }
+
+        if (chain_parent != null)
+        {
+            if (chain_drawGizmos)
+                DrawGizmosBoxColliders(chain_parent.transform);
+            if (chain_liveUpdate)
+                CreateBoxesChain();
+        }
+    }
+
     #endregion
 
     #region [Methods: UI]
 
     void OnGUI()
     {
+        CreateTabs(ref tabIndex, new() { 
+            ("Editor", CreateBoxColEditorUI), 
+            ("Chain", CreateBoxesChainEditorUI)
+        });
+
+        if (tabIndex == 0)
+            CreateBoxColEditorUI();
+        else if (tabIndex == 1)
+            CreateBoxesChainEditorUI();
+    }
+
+    void CreateBoxColEditorUI()
+    {
         CreateToggle(ref isActive, "Active", OnEnable, OnDisable);
-        CreateObjectField(ref boxPrefab, "Prefab"); ;
+        CreateObjectField(ref boxPrefab, "Prefab");
         CreateButton(InstantiateBox, boxPrefab == null ? "New Default Box" : "New Prefab Box", 32);
         EditorGUILayout.Separator();
         CreateEnumField(ref handlePosPivot, "Handle Pos Pivot", OnHandlePivotChanged);
         CreateVector3FieldDisabled(ref handlePosOffset, "Handle Pos Offset", handlePosPivot != PosPivot.Custom);
-        CreateToggle(ref isUsingScale, "Use Scale Handle");
-        CreateEnumField(ref scaleDirection, "Scale Direction", OnScaleDirectionChanged);
+        CreateCurrentBoxSizeField();
+
+        void CreateCurrentBoxSizeField()
+        {
+            if (currentBox != null)
+            {
+                EditorGUI.BeginDisabledGroup(currentBox == null || isActive);
+                var size = (Vector2)currentBoxOriginalSize;
+                CreateVector2Field(ref size, "Size");
+                currentBoxOriginalSize = new(size.x, size.y, currentBoxOriginalSize.z);
+                currentBox.size = new(size.x, size.y, currentBox.size.z);
+                EditorGUI.EndDisabledGroup();
+            }
+        }
+    }
+
+    void CreateBoxesChainEditorUI()
+    {
+        CreateObjectField(ref chain_parent, "Chain Parent");
+        CreateObjectField(ref boxPrefab, "Prefab");
+        if (boxPrefab != null)
+            CreateToggle(ref chain_overridePivot, "Override Pivot");
+        if (boxPrefab == null || (boxPrefab != null && chain_overridePivot))
+            CreateEnumField(ref chain_posPivot, "Pos Pivot", Chain_OnPivotChanged);
+        if (boxPrefab != null)
+            CreateToggle(ref chain_overrideSize, "Override Size");
+        if (boxPrefab == null || (boxPrefab != null && chain_overrideSize))
+            CreateVector2Field(ref chain_size, "Size");
+        CreateToggle(ref chain_closeLoop, "Close Loop");
+        CreateToggle(ref chain_drawGizmos, "Draw Yellow Gizmos");
+        CreateToggle(ref chain_liveUpdate, "Live Update");
+        if (!chain_liveUpdate)
+            CreateButton(CreateBoxesChain, "Create Chain", 32);
+    }
+
+    static void CreateTabs(ref int tabIndex, List<(string, Action)> parameters)
+    {
+        GUILayout.BeginHorizontal();
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            var (label, action) = parameters[i];
+            var guiColor = GUI.color;
+            if (i == tabIndex)
+                GUI.color = Color.green;
+            if (GUILayout.Button(label, GUILayout.Height(16)))
+            {
+                tabIndex = i;
+                action?.Invoke();
+            }
+            GUI.color = guiColor;
+        }
+        GUILayout.EndHorizontal();
     }
 
     static void CreateToggle(ref bool targetBool, string label, Action onTrue = null, Action onFalse = null)
@@ -122,38 +213,20 @@ public class BoxColToolboxWindow : EditorWindow
         EditorGUI.EndDisabledGroup();
     }
 
+    static void CreateVector2Field(ref Vector2 targetVector, string label)
+    {
+        targetVector = EditorGUILayout.Vector2Field(label, targetVector);
+    }
+
     #endregion
 
     #region [Methods: Handles]
-
-    void OnSceneGUI(SceneView view)
-    {
-        if (isActive && currentBox != null)
-        {
-            CreatePosHandles();
-            CreateScaleHandle();
-            ModifyBoxByHandles();
-            UpdateHandlesRot();
-        }
-    }
 
     void CreatePosHandles()
     {
         var offset = GetCalibratedHandleOffset(currentBox, handlePosOffset);
         startHandlePos = CreateHandle(startHandlePos, startHandleRot, offset, COLOR_GREEN);
-        endHandlePos = CreateHandle(endHandlePos, endHandleRot, offset, COLOR_GREEN);
-    }
-
-    void CreateScaleHandle()
-    {
-        if (!isUsingScale)
-            return;
-        var offset = GetCalibratedHandleOffset(currentBox, handleScaleOffset);
-        var center = Multiply(currentBox.center, currentBox.transform.localScale);
-        var currentBoxCenterPos = currentBox.transform.position + GetOffsetByLocalRotation(currentBox.transform, center);
-        var forwardRadius = currentBox.transform.forward * currentBox.size.z / 2 * currentBox.transform.localScale.z;
-        var pos = currentBoxCenterPos - forwardRadius;
-        scaleHandlePos = CreateHandle(pos, scaleHandleRot, offset, COLOR_BLUE);
+        endHandlePos = CreateHandle(endHandlePos, endHandleRot, offset, COLOR_YELLOW);
     }
 
     static Vector3 GetCalibratedHandleOffset(BoxCollider box, Vector3 offset)
@@ -191,7 +264,6 @@ public class BoxColToolboxWindow : EditorWindow
             startHandleRot = Quaternion.identity;
             endHandleRot = Quaternion.identity;
         }
-        scaleHandleRot = currentBox.transform.rotation;
     }
 
     void OnHandlePivotChanged(PosPivot pivot)
@@ -200,37 +272,20 @@ public class BoxColToolboxWindow : EditorWindow
         {
             case PosPivot.Center:
                 handlePosOffset = new(0, 0, 0);
-                handleScaleOffset = new(1, 1, 0);
                 break;
             case PosPivot.TopRight:
                 handlePosOffset = new(1, 1, 0);
-                handleScaleOffset = -handlePosOffset;
                 break;
             case PosPivot.BottomRight:
                 handlePosOffset = new(1, -1, 0);
-                handleScaleOffset = -handlePosOffset;
                 break;
             case PosPivot.BottomLeft:
                 handlePosOffset = new(-1, -1, 0);
-                handleScaleOffset = -handlePosOffset;
                 break;
             case PosPivot.TopLeft:
                 handlePosOffset = new(-1, 1, 0);
-                handleScaleOffset = -handlePosOffset;
                 break;
             case PosPivot.Custom:
-                handleScaleOffset = new(1, 1, 0);
-                break;
-        }
-    }
-
-    void OnScaleDirectionChanged(ScaleDirection direction)
-    {
-        switch (direction)
-        {
-            case ScaleDirection.All:
-                break;
-            case ScaleDirection.Corner:
                 break;
         }
     }
@@ -244,27 +299,10 @@ public class BoxColToolboxWindow : EditorWindow
         currentBox.gameObject.hideFlags = HideFlags.NotEditable;
 
         var distance = Vector3.Distance(startHandlePos, endHandlePos) / currentBox.transform.localScale.z;
-        if (isUsingScale)
-        {
-            var centerToScaleHandle = currentBox.transform.InverseTransformPoint(scaleHandlePos) + currentBox.size;
-            if (scaleDirection == ScaleDirection.All)
-            {
-                currentBox.center = new(currentBoxOriginalCenter.x,currentBoxOriginalCenter.y, (distance - 1) / 2);
-                currentBox.size = new(centerToScaleHandle.x, centerToScaleHandle.y, distance);
-            }
-            else if (scaleDirection == ScaleDirection.Corner)
-            {
-                currentBox.center = new(currentBoxOriginalCenter.x, currentBoxOriginalCenter.y, (distance - 1) / 2);
-                currentBox.size = new(centerToScaleHandle.x, centerToScaleHandle.y, distance);
-            }
-        }
-        else
-        {
-            currentBox.center = new(currentBoxOriginalCenter.x, currentBoxOriginalCenter.y, (distance - 1) / 2);
-            currentBox.size = new(currentBoxOriginalSize.x, currentBoxOriginalSize.y, distance);
-        }
         currentBox.transform.position = GetCurrentBoxPos(currentBox, startHandlePos);
         currentBox.transform.rotation = LookAt(startHandlePos, endHandlePos);
+        currentBox.center = new(currentBoxOriginalCenter.x, currentBoxOriginalCenter.y, (distance - 1) / 2);
+        currentBox.size = new(currentBoxOriginalSize.x, currentBoxOriginalSize.y, distance);
 
         static Vector3 GetCurrentBoxPos(BoxCollider box, Vector3 startHandlePos)
         {
@@ -298,8 +336,6 @@ public class BoxColToolboxWindow : EditorWindow
             startHandleRot = Quaternion.identity;
             endHandlePos = pos + forwardRadius;
             endHandleRot = Quaternion.identity;
-            scaleHandlePos = pos - forwardRadius;
-            scaleHandleRot = Quaternion.identity;
         }
         else
         {
@@ -308,8 +344,96 @@ public class BoxColToolboxWindow : EditorWindow
             startHandleRot = Quaternion.identity;
             endHandlePos = Vector3.zero;
             endHandleRot = Quaternion.identity;
-            scaleHandlePos = Vector3.zero;
-            scaleHandleRot = Quaternion.identity;
+        }
+    }
+
+    #endregion
+
+    #region [Methods: Chain]
+
+    void Chain_OnPivotChanged(PosPivot pivot)
+    {
+        chain_posPivot = pivot;
+    }
+
+    void CreateBoxesChain()
+    {
+        if (chain_parent == null || chain_parent.transform.childCount < 2)
+            return;
+
+        for (int i = 0; i < chain_parent.transform.childCount; i++)
+        {
+            if (chain_closeLoop && chain_parent.transform.childCount < 3)
+                break;
+            else if (!chain_closeLoop && i == chain_parent.transform.childCount - 1)
+                break;
+
+            var child = chain_parent.transform.GetChild(i);
+            if (!child.TryGetComponent<BoxCollider>(out var box))
+                box = child.gameObject.AddComponent<BoxCollider>();
+            var nextChild = chain_parent.transform.GetChild((i + 1) % chain_parent.transform.childCount);
+            var distance = Vector3.Distance(child.position, nextChild.position);
+            child.LookAt(nextChild);
+            var sizeXY = GetSizeXY();
+            box.size = new(sizeXY.x, sizeXY.y, distance);
+            var centerXY = GetCenterXY(sizeXY);
+            box.center = new(centerXY.x, centerXY.y, distance / 2);
+        }
+
+        Vector2 GetSizeXY()
+        {
+            if (boxPrefab != null && chain_overrideSize && boxPrefab.TryGetComponent<BoxCollider>(out var box))
+                return new(box.size.x, box.size.y);
+            else
+                return chain_size;
+        }
+
+        Vector2 GetCenterXY(Vector2 sizeXY)
+        {
+            if (boxPrefab != null && chain_overrideSize && boxPrefab.TryGetComponent<BoxCollider>(out var box))
+            {
+                return new(box.center.x, box.center.y);
+            }
+            else
+            {
+                switch (chain_posPivot)
+                {
+                    case PosPivot.Center:
+                        return new(0, 0);
+                    case PosPivot.TopRight:
+                        return new(sizeXY.x / 2, -sizeXY.y / 2);
+                    case PosPivot.BottomRight:
+                        return new(sizeXY.x / 2, sizeXY.y / 2);
+                    case PosPivot.BottomLeft:
+                        return new(-sizeXY.x / 2, sizeXY.y / 2);
+                    case PosPivot.TopLeft:
+                        return new(-sizeXY.x / 2, -sizeXY.y / 2);
+                    case PosPivot.Custom:
+                        return new(0, 0);
+                    default:
+                        return new(0, 0);
+                }
+            }
+        }
+    }
+
+    static void DrawGizmosBoxColliders(Transform parent)
+    {
+        var currentSelectedBox = 
+            Selection.activeGameObject != null &&
+            Selection.activeGameObject.TryGetComponent<BoxCollider>(out var selectedBox) ? selectedBox : null;
+        var originalMatrix = Handles.matrix;
+        var originalColor = Handles.color;
+        foreach (Transform child in parent.transform)
+        {
+            if (child.TryGetComponent<BoxCollider>(out var box) && box != currentSelectedBox)
+            {
+                Handles.matrix = child.localToWorldMatrix;
+                Handles.color = Color.yellow;
+                Handles.DrawWireCube(box.center, box.size);
+                Handles.matrix = originalMatrix;
+                Handles.color = originalColor;
+            }
         }
     }
 
@@ -373,12 +497,3 @@ public class BoxColToolboxWindow : EditorWindow
 
     #endregion
 }
-
-/*
-TODO:
-- Implement ScaleDirection.Rotation feature
-- Spawn At Pos field
-- Apply Scale button
-- Chain Box Cols feature
-- Handle multiple selections
-*/
