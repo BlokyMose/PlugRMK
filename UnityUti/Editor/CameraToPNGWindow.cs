@@ -1,21 +1,49 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace SwingHero
+namespace PlugRMK.UnityUti.EditorUti
 {
     public class CameraToPNGWindow : EditorWindow
     {
+        #region [Data Structures]
+
         enum ShootType { Single, Batch };
+        enum SizeMode { Custom, Screen };
+
+        class DelayedAction
+        {
+            public double Time { get; private set; }
+            public Action Action { get; private set; }
+            public bool IsInvoked { get; set; }
+
+            public DelayedAction(double time, Action action)
+            {
+                this.Time = time;
+                this.Action = action;
+            }
+        }
+
+        #endregion
+
+        #region [Variables]
+
         ShootType shootType = ShootType.Single;
-        string fileName = "ImageName";
         const string OBJECT_NAME = "{OBJECT_NAME}";
-        string batchFileNameFormat = $"{OBJECT_NAME}";
+        readonly static string defaultObjectName = $"ImageFile_{DateTime.Now:yyyyMMdd_HH_mm_ss}";
+        string fileNameFormat = $"{OBJECT_NAME}";
         Transform batchParent;
-        Vector2Int imageSize = new(256, 256);
+        SizeMode sizeMode = SizeMode.Custom;
+        Vector2Int imageSize = new(512, 512);
         Camera camera;
+        bool isDelayShot;
+        float shotDelay = .1f;
+        readonly List<DelayedAction> delayedActions = new();
+
+        #endregion
+
+        #region [Methods: Setups]
 
         [MenuItem("Tools/Camera To PNG")]
         public static void ShowWindow()
@@ -29,16 +57,36 @@ namespace SwingHero
         {
             if (camera == null)
                 camera = Camera.main;
+            delayedActions.Clear();
         }
 
         void OnGUI()
         {
             DrawShootTypeField();
             DrawFileNameFields();
+            DrawSizeModeField();
             DrawImageSizeField();
             DrawCameraField();
+            DrawDelayShotFields();
             DrawExportButton();
         }
+
+        void Update()
+        {
+            if (isDelayShot)
+            {
+                foreach (var delayedAction in delayedActions)
+                {
+                    if (!delayedAction.IsInvoked && delayedAction.Time < EditorApplication.timeSinceStartup)
+                    {
+                        delayedAction.Action();
+                        delayedAction.IsInvoked = true;
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region [Methods: Field Drawers]
 
@@ -49,21 +97,42 @@ namespace SwingHero
 
         void DrawFileNameFields()
         {
-            switch (shootType)
+            fileNameFormat = EditorGUILayout.TextField(
+                new GUIContent("File Name", "{OBJECT_NAME} is the selected GameObject's name.\nIn Batch mode, it's the name of each children of Batch Parent"),
+                fileNameFormat);
+
+            if (shootType == ShootType.Single)
             {
-                case ShootType.Single:
-                    fileName = EditorGUILayout.TextField("File Name", fileName);
-                    break;
-                case ShootType.Batch:
-                    batchFileNameFormat = EditorGUILayout.TextField("File Name Format", batchFileNameFormat);
-                    batchParent = (Transform)EditorGUILayout.ObjectField("Batch Parent", batchParent, typeof(Transform), true);
-                    break;
+                var fileName = GetSingleFileName(fileNameFormat);
+                var labelStyle = new GUIStyle(EditorStyles.label)
+                {
+                    alignment = TextAnchor.MiddleRight,
+                    normal = { textColor = new Color(.7f, .7f, .7f) }
+                };
+                EditorGUILayout.LabelField($"{fileName}.png ", labelStyle);
             }
+            else if (shootType == ShootType.Batch)
+            {
+                batchParent = (Transform)EditorGUILayout.ObjectField("Batch Parent", batchParent, typeof(Transform), true);
+            }
+        }
+
+        void DrawSizeModeField()
+        {
+            sizeMode = (SizeMode)EditorGUILayout.EnumPopup("Size Mode", sizeMode);
         }
 
         void DrawImageSizeField()
         {
-            imageSize = EditorGUILayout.Vector2IntField("Size", imageSize);
+            if (sizeMode == SizeMode.Custom)
+            {
+                imageSize = EditorGUILayout.Vector2IntField("", imageSize);
+            }
+            else if (sizeMode == SizeMode.Screen)
+            {
+                var gameViewSize = Handles.GetMainGameViewSize();
+                imageSize = new Vector2Int((int)gameViewSize.x, (int)gameViewSize.y);
+            }
         }
 
         void DrawCameraField()
@@ -73,6 +142,17 @@ namespace SwingHero
                 camera = Camera.main;
         }
 
+        void DrawDelayShotFields()
+        {
+            isDelayShot = EditorGUILayout.Toggle("Delay Shot", isDelayShot);
+            if (isDelayShot)
+            {
+                shotDelay = EditorGUILayout.FloatField("Delay", shotDelay);
+                if (shotDelay < 0)
+                    shotDelay = 0.1f;
+            }
+        }
+
         void DrawExportButton()
         {
             if (GUILayout.Button("Export", GUILayout.Height(32)))
@@ -80,10 +160,16 @@ namespace SwingHero
                 switch (shootType)
                 {
                     case ShootType.Single:
-                        ExportSingle();
+                        if (isDelayShot)
+                            ExportSingleWithDelay();
+                        else
+                            ExportSingle();
                         break;
                     case ShootType.Batch:
-                        ExportBatch();
+                        if (isDelayShot)
+                            ExportBatchWithDelay();
+                        else
+                            ExportBatch();
                         break;
                 }
             }
@@ -95,12 +181,19 @@ namespace SwingHero
 
         void ExportSingle()
         {
+            var fileName = GetSingleFileName(fileNameFormat);
             var path = EditorUtility.SaveFilePanel("Save PNG", "", $"{fileName}.png", "png");
             if (string.IsNullOrEmpty(path))
                 return;
 
-            Export(path);
+            ExportCameraTo(path);
             OpenFolder(path[..path.LastIndexOf('/')]);
+        }
+
+        void ExportSingleWithDelay()
+        {
+            delayedActions.Clear();
+            delayedActions.Add(new(EditorApplication.timeSinceStartup + shotDelay, ExportSingle));
         }
 
         void ExportBatch()
@@ -116,15 +209,69 @@ namespace SwingHero
             foreach (Transform child in batchParent)
             {
                 child.gameObject.SetActive(true);
-                var fileName = batchFileNameFormat.Replace(OBJECT_NAME, child.name);
-                Export($"{folderPath}/{fileName}.png");
+                var fileName = fileNameFormat.Replace(OBJECT_NAME, child.name);
+                ExportCameraTo($"{folderPath}/{fileName}.png");
                 child.gameObject.SetActive(false);
             }
             RestoreInitialActiveStates(initialActiveState);
             OpenFolder(folderPath);
         }
 
-        void Export(string path)
+        void ExportBatchWithDelay()
+        {
+            if (batchParent == null)
+                return;
+
+            var folderPath = EditorUtility.SaveFolderPanel("Save PNGs", "Folder", "");
+            if (string.IsNullOrEmpty(folderPath))
+                return;
+
+            delayedActions.Clear();
+            var index = 0;
+            var initialActiveState = CreateInitialActiveStates(batchParent);
+            foreach (Transform child in batchParent)
+            {
+                DelayActivation(index, child);
+                DelayExport(index, child, folderPath);
+                index++;
+            }
+            DelayReset(folderPath, initialActiveState);
+
+            void DelayActivation(int index, Transform child)
+            {
+                delayedActions.Add(new(
+                    EditorApplication.timeSinceStartup + index * shotDelay,
+                    () => child.gameObject.SetActive(true)
+                ));
+            }
+
+            void DelayExport(int index, Transform child, string folderPath)
+            {
+                delayedActions.Add(new(
+                    EditorApplication.timeSinceStartup + index * shotDelay + .1,
+                    () =>
+                    {
+                        var fileName = fileNameFormat.Replace(OBJECT_NAME, child.name);
+                        ExportCameraTo($"{folderPath}/{fileName}.png");
+                        child.gameObject.SetActive(false);
+                    }
+                ));
+            }
+
+            void DelayReset(string folderPath, List<(Transform, bool)> initialActiveState)
+            {
+                delayedActions.Add(new(
+                    EditorApplication.timeSinceStartup + batchParent.childCount * shotDelay,
+                    () =>
+                    {
+                        RestoreInitialActiveStates(initialActiveState);
+                        OpenFolder(folderPath);
+                    }
+                ));
+            }
+        }
+
+        void ExportCameraTo(string path)
         {
             camera.depthTextureMode = DepthTextureMode.Depth;
             var cacheCurrentTexture = camera.targetTexture;
@@ -145,7 +292,7 @@ namespace SwingHero
             System.IO.File.WriteAllBytes(path, pngData);
             camera.targetTexture = cacheCurrentTexture;
         }
-        
+
         #endregion
 
         #region [Methods: Utility]
@@ -175,17 +322,15 @@ namespace SwingHero
                 Debug.LogError("Folder path is null or empty.");
                 return;
             }
-
-            folderPath = folderPath.Replace("/", "\\"); // Ensure compatibility with Windows paths
-
             if (System.IO.Directory.Exists(folderPath))
             {
 #if UNITY_EDITOR_WIN
+                folderPath = folderPath.Replace("/", "\\");
                 System.Diagnostics.Process.Start("explorer.exe", folderPath);
 #elif UNITY_EDITOR_OSX
-        System.Diagnostics.Process.Start("open", folderPath);
+                System.Diagnostics.Process.Start("open", folderPath);
 #else
-        Debug.LogError("Platform not supported for opening folders.");
+                Debug.LogError("Platform not supported for opening folders.");
 #endif
             }
             else
@@ -193,7 +338,24 @@ namespace SwingHero
                 Debug.LogError($"Folder does not exist: {folderPath}");
             }
         }
-        
+
+        static string GetSingleFileName(string fileNameFormat)
+        {
+            if (fileNameFormat.Contains(OBJECT_NAME))
+            {
+                var objectName = Selection.activeGameObject != null ? Selection.activeGameObject.name : defaultObjectName;
+                return fileNameFormat.Replace(OBJECT_NAME, objectName);
+            }
+            else if (fileNameFormat.Length > 0)
+            {
+                return fileNameFormat;
+            }
+            else
+            {
+                return defaultObjectName;
+            }
+        }
+
         #endregion
     }
 }
