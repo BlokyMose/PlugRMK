@@ -37,8 +37,8 @@ namespace PlugRMK.UnityUti.EditorUti
         SizeMode sizeMode = SizeMode.Custom;
         Vector2Int imageSize = new(512, 512);
         Camera camera;
-        bool isDelayShot;
-        float shotDelay = .1f;
+        bool isDelayShoot;
+        float shootDelay = .1f;
         readonly List<DelayedAction> delayedActions = new();
 
         #endregion
@@ -48,8 +48,10 @@ namespace PlugRMK.UnityUti.EditorUti
         [MenuItem("Tools/Camera To PNG")]
         public static void ShowWindow()
         {
-            var window = GetWindow<CameraToPNGWindow>();
-            window.titleContent = new GUIContent("Camera to PNG");
+            var window = GetWindow<CameraToPNGWindow>("Camera to PNG");
+            var title = EditorGUIUtility.IconContent("d_RawImage Icon");
+            title.text = "Camera to PNG";
+            window.titleContent = title;
             window.Show();
         }
 
@@ -67,13 +69,13 @@ namespace PlugRMK.UnityUti.EditorUti
             DrawSizeModeField();
             DrawImageSizeField();
             DrawCameraField();
-            DrawDelayShotFields();
+            DrawDelayShootFields();
             DrawExportButton();
         }
 
         void Update()
         {
-            if (isDelayShot)
+            if (isDelayShoot)
             {
                 foreach (var delayedAction in delayedActions)
                 {
@@ -142,14 +144,14 @@ namespace PlugRMK.UnityUti.EditorUti
                 camera = Camera.main;
         }
 
-        void DrawDelayShotFields()
+        void DrawDelayShootFields()
         {
-            isDelayShot = EditorGUILayout.Toggle("Delay Shot", isDelayShot);
-            if (isDelayShot)
+            isDelayShoot = EditorGUILayout.Toggle("Delay Shoot", isDelayShoot);
+            if (isDelayShoot)
             {
-                shotDelay = EditorGUILayout.FloatField("Delay", shotDelay);
-                if (shotDelay < 0)
-                    shotDelay = 0.1f;
+                shootDelay = EditorGUILayout.FloatField("Delay", shootDelay);
+                if (shootDelay < 0)
+                    shootDelay = 0.1f;
             }
         }
 
@@ -160,13 +162,13 @@ namespace PlugRMK.UnityUti.EditorUti
                 switch (shootType)
                 {
                     case ShootType.Single:
-                        if (isDelayShot)
+                        if (isDelayShoot)
                             ExportSingleWithDelay();
                         else
                             ExportSingle();
                         break;
                     case ShootType.Batch:
-                        if (isDelayShot)
+                        if (isDelayShoot)
                             ExportBatchWithDelay();
                         else
                             ExportBatch();
@@ -193,7 +195,7 @@ namespace PlugRMK.UnityUti.EditorUti
         void ExportSingleWithDelay()
         {
             delayedActions.Clear();
-            delayedActions.Add(new(EditorApplication.timeSinceStartup + shotDelay, ExportSingle));
+            delayedActions.Add(new(EditorApplication.timeSinceStartup + shootDelay, ExportSingle));
         }
 
         void ExportBatch()
@@ -240,7 +242,7 @@ namespace PlugRMK.UnityUti.EditorUti
             void DelayActivation(int index, Transform child)
             {
                 delayedActions.Add(new(
-                    EditorApplication.timeSinceStartup + index * shotDelay,
+                    EditorApplication.timeSinceStartup + index * shootDelay,
                     () => child.gameObject.SetActive(true)
                 ));
             }
@@ -248,7 +250,7 @@ namespace PlugRMK.UnityUti.EditorUti
             void DelayExport(int index, Transform child, string folderPath)
             {
                 delayedActions.Add(new(
-                    EditorApplication.timeSinceStartup + index * shotDelay + .1,
+                    EditorApplication.timeSinceStartup + index * shootDelay + .1,
                     () =>
                     {
                         var fileName = fileNameFormat.Replace(OBJECT_NAME, child.name);
@@ -261,7 +263,7 @@ namespace PlugRMK.UnityUti.EditorUti
             void DelayReset(string folderPath, List<(Transform, bool)> initialActiveState)
             {
                 delayedActions.Add(new(
-                    EditorApplication.timeSinceStartup + batchParent.childCount * shotDelay,
+                    EditorApplication.timeSinceStartup + batchParent.childCount * shootDelay,
                     () =>
                     {
                         RestoreInitialActiveStates(initialActiveState);
